@@ -1,7 +1,7 @@
 <fieldset>
     <legend>{{ $groupTitle }}</legend>
     @foreach ($group as $childLineKey => $childLine)
-        @if(is_array($group))
+        @if(is_array($childLine))
             @include('transleite::atoms.form.transleite-group', [
                 'groupTitle' => $groupTitle . ' | ' .$lineKey,
                 'group' => $childLine,

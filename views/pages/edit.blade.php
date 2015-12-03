@@ -26,9 +26,11 @@
                 <input type="hidden" name="_method" value="PUT">
 
                 <ul class="nav nav-tabs">
+                    <?php $i = 0?>
                     @foreach (array_keys($editLangs) as $locale)
-                        <li><a href="{{ '#' . $locale }}" role="tab" aria-controls="{{ $locale }}">{{ $locale }}</a>
+                        <li role="presentation" class="{{ $i === 0 ? 'active' : ''}}"><a href="{{ '#' . $locale }}" role="tab" aria-controls="{{ $locale }}">{{ $locale }}</a>
                         </li>
+                        <?php $i++?>
                     @endforeach
 
                     <li class="pull-right">
@@ -39,8 +41,9 @@
                 </ul>
 
                 <div class="tab-content">
+                    <?php $i = 0?>
                     @foreach($editLangs as $langKey => $langLines)
-                        <div role="tabpanel" class="tab-pane" id="{{ $langKey }}">
+                        <div role="tabpanel" class="tab-pane {{ $i === 0 ? 'active' : ''}}" id="{{ $langKey }}">
                             <div class="form-horizontal">
                                 @foreach ($langLines as $lineKey => $line)
                                     @if(is_array($line))
@@ -68,6 +71,7 @@
                                 </button>
                             </div>
                         </div>
+                        <?php $i++?>
                     @endforeach
                 </div>
             </form>
