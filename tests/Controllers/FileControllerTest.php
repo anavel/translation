@@ -54,7 +54,7 @@ class FileControllerTest extends TestBase
         \App::instance('translator', $transMock = $this->mock('Illuminate\Filesystem\Filesystem\FileLoader'));
         config(['transleite.files' => $this->config]);
 
-        $transMock->shouldReceive('trans')->andReturn(['yeah']);
+        $transMock->shouldReceive('trans')->andReturn(['yeah' => 'yeah']);
 
         $result = $this->sut->edit('test');
 
@@ -66,6 +66,8 @@ class FileControllerTest extends TestBase
 
         $this->assertInternalType('array', $viewData['en']);
         $this->assertInternalType('array', $viewData['es']);
+
+        $this->assertArrayHasKey('yeah', $viewData['en']);
     }
 
 //    public function test_reads_from_local_filedriver_if_not_set()
