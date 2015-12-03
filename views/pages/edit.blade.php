@@ -44,7 +44,7 @@
                             <div class="form-horizontal">
                                 @foreach ($langLines as $lineKey => $line)
                                     @if(is_array($line))
-                                        @include('atoms.form.transleite-group', [
+                                        @include('transleite::atoms.form.transleite-group', [
                                             'groupTitle' => $lineKey,
                                             'group' => $line,
                                             'formElementID' => "translations[$langKey]"

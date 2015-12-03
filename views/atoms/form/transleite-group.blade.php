@@ -2,7 +2,7 @@
     <legend>{{ $groupTitle }}</legend>
     @foreach ($group as $childLineKey => $childLine)
         @if(is_array($group))
-            @include('atoms.form.transleite-group', [
+            @include('transleite::atoms.form.transleite-group', [
                 'groupTitle' => $groupTitle . ' | ' .$lineKey,
                 'group' => $childLine,
                 'formElementID' => "{$formElementID}[{$langKey}]"
