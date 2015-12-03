@@ -32,6 +32,10 @@ class FileController extends Controller
 
         $editLangs = [];
 
+        //Fallback must be empty, otherwise empty translations would show that lang
+        $trans = \App::make('translator');
+        $trans->setFallback('');
+
         foreach ($this->lang as $lang) {
             $transResult = trans($fileKey, [], null, $lang);
             /*

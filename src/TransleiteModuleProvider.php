@@ -66,7 +66,7 @@ class TransleiteModuleProvider extends ModuleProvider
 
     public function hasSidebar()
     {
-        return true;
+        return false;
     }
 
     public function sidebarMenu()

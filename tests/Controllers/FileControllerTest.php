@@ -54,6 +54,7 @@ class FileControllerTest extends TestBase
         \App::instance('translator', $transMock = $this->mock('Illuminate\Filesystem\Filesystem\FileLoader'));
         config(['transleite.files' => $this->config]);
 
+        $transMock->shouldReceive('setFallback')->andReturn('');
         $transMock->shouldReceive('trans')->andReturn(['yeah' => 'yeah']);
 
         $result = $this->sut->edit('test');
