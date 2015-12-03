@@ -1,0 +1,43 @@
+{
+    "name": "anavallasuiza/transleite",
+    "description": "Manage translations",
+    "authors": [
+        {
+            "name": "Adrian P. Blunier",
+            "email": "adrian@anavallasuiza.com"
+        },
+        {
+            "name": "Carlos Morales",
+            "email": "carlos@anavallasuiza.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.9",
+        "illuminate/support": "5.1.*",
+        "illuminate/translation": "5.1.*",
+        "anavallasuiza/adoadomin": "dev-master"
+    },
+    "require-dev": {
+        "orchestra/testbench": "~3.1",
+        "phpunit/phpunit": "~4.0",
+        "whatthejeff/nyancat-phpunit-resultprinter": "~1.2",
+        "mockery/mockery": "^0.9.4"
+    },
+    "repositories": [
+      {
+        "type": "vcs",
+        "url" : "https://github.com/anavallasuiza/adoadomin"
+      }
+    ],
+    "autoload": {
+        "psr-4": {
+            "ANavallaSuiza\\Transleite\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Transleite\\Tests\\": "tests"
+        }
+    },
+    "minimum-stability": "stable"
+}
