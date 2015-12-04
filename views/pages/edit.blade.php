@@ -52,7 +52,7 @@
                                         @include('transleite::atoms.form.transleite-group', [
                                             'groupTitle' => $lineKey,
                                             'group' => $line,
-                                            'formElementID' => "translations[$langKey]"
+                                            'formElementID' => "[$lineKey]"
                                         ])
                                     @else
                                         <div class="form-group transleite-group">
