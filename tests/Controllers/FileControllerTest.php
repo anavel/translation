@@ -166,6 +166,39 @@ class FileControllerTest extends TestBase
         $this->assertEquals('success', $alert['type']);
     }
 
+    public function test_update_filters_empty_keys()
+    {
+        $requestMock = $this->mock('Illuminate\Http\Request');
+
+        $requestMock->shouldReceive('has')->with('translations')->times(1)->andReturn(true);
+        $requestMock->shouldReceive('input')->with('translations')->times(1)->andReturn($returnArray = [
+            'en' => [
+                'key' => 'value',
+                'otherkey' => ''
+            ],
+            'es' => [
+                'key' => 'value'
+            ]
+        ]);
+
+        Storage::shouldReceive('disk')->times(1)->with('diskdriver')->andReturn(\Mockery::self());
+        Storage::shouldReceive('put')->times(1)->with('vendor/vendorname/en/test.php', '<?php
+
+return array (
+  \'key\' => \'value\',
+);')->andReturn(\Mockery::self());
+        Storage::shouldReceive('put')->times(1)->with('vendor/vendorname/es/test.php', \Mockery::any())->andReturn(\Mockery::self());
+
+        $result = $this->sut->update($requestMock, 'vendorname', 'test');
+
+        $this->assertInstanceOf('Illuminate\Http\RedirectResponse', $result);
+        $this->assertTrue($result->getSession()->has('adoadomin-alert'));
+
+        $alert = $result->getSession()->get('adoadomin-alert');
+
+        $this->assertEquals('success', $alert['type']);
+    }
+
     public function test_throws_exception_if_disk_not_set()
     {
         $this->setExpectedException('Exception', 'filedriver should be set in config');

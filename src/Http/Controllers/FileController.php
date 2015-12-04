@@ -59,10 +59,17 @@ class FileController extends Controller
         $disk = Storage::disk($diskDriver);
 
         foreach ($this->lang as $lang) {
-            $fileRoute = empty($param2) ? $lang . '/' . $param . '.php' : 'vendor/' . $param .'/' . $lang . '/' . $param2 . '.php';
+            $translation = array_filter($translations[$lang], function ($item) {
+                if (empty($item)) {
+                    return false;
+                }
+
+                return true;
+            });
+            $fileRoute = empty($param2) ? $lang . '/' . $param . '.php' : 'vendor/' . $param . '/' . $lang . '/' . $param2 . '.php';
             $string = "<?php" . PHP_EOL . PHP_EOL;
             $string .= 'return ';
-            $string .= var_export($translations[$lang], true) . ';';
+            $string .= var_export($translation, true) . ';';
             $disk->put($fileRoute, $string);
         }
 
@@ -73,6 +80,7 @@ class FileController extends Controller
             'title' => trans('transleite::messages.alert_translations_saved_title'),
             'text'  => trans('transleite::messages.alert_translations_saved_text')
         ]);
+
         return redirect()->back();
     }
 }
