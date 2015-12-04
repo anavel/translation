@@ -129,6 +129,16 @@ class FileController extends Controller
         return array_filter($array);
     }
 
+    /**
+     * @return bool
+     * @author  Kevin van Zonneveld &lt;kevin@vanzonneveld.net>
+     * @copyright 2008 Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+     * @license   http://www.opensource.org/licenses/bsd-license.php New BSD Licence
+     * @version   SVN: Release: $Id: ksortTree.inc.php 223 2009-01-25 13:35:12Z kevin $
+     * @link      http://kevin.vanzonneveld.net/
+     *
+     * @param array $array
+     */
     private function ksortTree(&$array)
     {
         if (! is_array($array)) {
