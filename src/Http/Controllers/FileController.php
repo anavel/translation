@@ -60,7 +60,7 @@ class FileController extends Controller
 
         foreach ($this->lang as $lang) {
             $fileRoute = empty($param2) ? $lang . '/' . $param . '.php' : 'vendor/' . $param .'/' . $lang . '/' . $param2 . '.php';
-            $string = "<?php" . PHP_EOL;
+            $string = "<?php" . PHP_EOL . PHP_EOL;
             $string .= 'return ';
             $string .= var_export($translations[$lang], true) . ';';
             $disk->put($fileRoute, $string);

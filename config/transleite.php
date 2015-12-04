@@ -37,8 +37,8 @@ return [
     | File Disc Driver
     |--------------------------------------------------------------------------
     |
-    | Optionally set the disc driver to use, defaults to 'local'
+    | Disc driver pointing to resources/lang folder
     |
     */
-//    'filedriver'  => 'local',
+    'filedriver'  => 'lang',
 ];
