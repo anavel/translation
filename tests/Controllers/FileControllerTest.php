@@ -199,6 +199,11 @@ return array (
         $this->assertEquals('success', $alert['type']);
     }
 
+    public function test_update_merges_keys_from_fallback_locale()
+    {
+        
+    }
+
     public function test_throws_exception_if_disk_not_set()
     {
         $this->setExpectedException('Exception', 'filedriver should be set in config');

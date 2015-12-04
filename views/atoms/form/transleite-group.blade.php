@@ -1,4 +1,4 @@
-<fieldset style="border-bottom: 1px solid grey">
+<fieldset class="text-center" style="border-bottom: 1px solid grey">
     <legend>{{ $groupTitle }}</legend>
     @foreach ($group as $childLineKey => $childLine)
         @if(is_array($childLine))
