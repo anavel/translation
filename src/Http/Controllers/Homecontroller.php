@@ -25,6 +25,11 @@ class HomeController extends Controller
             throw new \Exception('"user" or "vendor" files should be set');
         }
 
-        return new RedirectResponse(route('transleite.file.edit', key($files)));
+        if (array_key_exists('user', $files)) {
+            return new RedirectResponse(route('transleite.file.edit',  key($files['user'])));
+        } else {
+            $key = key($files['vendor']);
+            return new RedirectResponse(route('transleite.file.edit',  [$key, $files['vendor'][$key]]));
+        }
     }
 }

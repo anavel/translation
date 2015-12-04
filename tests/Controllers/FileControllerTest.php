@@ -33,7 +33,7 @@ class FileControllerTest extends TestBase
         ];
     }
 
-    public function test_returns_array_when_file_empty()
+    public function test_edit_returns_array_when_file_empty()
     {
         config(['transleite.files' => $this->config]);
 
@@ -49,7 +49,7 @@ class FileControllerTest extends TestBase
         $this->assertInternalType('array', $viewData['es']);
     }
 
-    public function test_returns_array_with_files_contents()
+    public function test_edit_returns_array_with_files_contents()
     {
         \App::instance('translator', $transMock = $this->mock('Illuminate\Filesystem\Filesystem\FileLoader'));
         config(['transleite.files' => $this->config]);
@@ -71,19 +71,128 @@ class FileControllerTest extends TestBase
         $this->assertArrayHasKey('yeah', $viewData['en']);
     }
 
-//    public function test_reads_from_local_filedriver_if_not_set()
-//    {
-//        Storage::shouldReceive('disk')->with('local')->times(1);
-//        config(['transleite.files' => $this->config]);
-//
-//        $this->sut->edit('one');
-//    }
-//
-//    public function test_reads_from_config_filedriver_if_set()
-//    {
-//        Storage::shouldReceive('disk')->with('driver')->times(1);
-//        config(['transleite.files' => array_merge($this->config, ['filedriver' => 'driver'])]);
-//
-//        $this->sut->edit('one');
-//    }
+    public function test_calls_vendor_file_when_param2_not_empty()
+    {
+        \App::instance('translator', $transMock = $this->mock('Illuminate\Filesystem\Filesystem\FileLoader'));
+        config(['transleite.files' => $this->config]);
+
+        $transMock->shouldReceive('setFallback')->andReturn('');
+        $transMock->shouldReceive('trans')->with('vendor::test', [], null,
+            \Mockery::any())->andReturn(['yeah' => 'yeah']);
+
+        $result = $this->sut->edit('vendor', 'test');
+
+        $this->assertObjectHasAttribute('data', $result);
+        $this->assertTrue($result->offsetExists('editLangs'));
+        $viewData = $result->offsetGet('editLangs');
+        $this->assertArrayHasKey('en', $viewData);
+        $this->assertArrayHasKey('es', $viewData);
+
+        $this->assertInternalType('array', $viewData['en']);
+        $this->assertInternalType('array', $viewData['es']);
+
+        $this->assertArrayHasKey('yeah', $viewData['en']);
+    }
+
+    public function test_update_bails_if_empty_array()
+    {
+        $requestMock = $this->mock('Illuminate\Http\Request');
+
+        $requestMock->shouldReceive('has')->with('translations')->times(1)->andReturn(false);
+
+        $result = $this->sut->update($requestMock, 'test');
+
+        $this->assertInstanceOf('Illuminate\Http\RedirectResponse', $result);
+        $this->assertTrue($result->getSession()->has('adoadomin-alert'));
+
+        $alert = $result->getSession()->get('adoadomin-alert');
+
+        $this->assertEquals('error', $alert['type']);
+    }
+
+    public function test_update_saves_array_to_file()
+    {
+        $requestMock = $this->mock('Illuminate\Http\Request');
+
+        $requestMock->shouldReceive('has')->with('translations')->times(1)->andReturn(true);
+        $requestMock->shouldReceive('input')->with('translations')->times(1)->andReturn($returnArray = [
+            'en' => [
+                'key' => 'value'
+            ],
+            'es' => [
+                'key' => 'value'
+            ]
+        ]);
+
+        Storage::shouldReceive('disc')->times(1)->with('local')->andReturn(\Mockery::self());
+        Storage::shouldReceive('put')->times(1)->with('resources/lang/en/test.php', $returnArray['en'])->andReturn(\Mockery::self());
+        Storage::shouldReceive('put')->times(1)->with('resources/lang/es/test.php', $returnArray['es'])->andReturn(\Mockery::self());
+
+        $result = $this->sut->update($requestMock, 'test');
+
+        $this->assertInstanceOf('Illuminate\Http\RedirectResponse', $result);
+        $this->assertTrue($result->getSession()->has('adoadomin-alert'));
+
+        $alert = $result->getSession()->get('adoadomin-alert');
+
+        $this->assertEquals('success', $alert['type']);
+    }
+
+    public function test_update_saves_array_to_vendor_file()
+    {
+        $requestMock = $this->mock('Illuminate\Http\Request');
+
+        $requestMock->shouldReceive('has')->with('translations')->times(1)->andReturn(true);
+        $requestMock->shouldReceive('input')->with('translations')->times(1)->andReturn($returnArray = [
+            'en' => [
+                'key' => 'value'
+            ],
+            'es' => [
+                'key' => 'value'
+            ]
+        ]);
+
+        Storage::shouldReceive('disc')->times(1)->with('local')->andReturn(\Mockery::self());
+        Storage::shouldReceive('put')->times(1)->with('resources/lang/vendor/vendorname/en/test.php', $returnArray['en'])->andReturn(\Mockery::self());
+        Storage::shouldReceive('put')->times(1)->with('resources/lang/vendor/vendorname/es/test.php', $returnArray['es'])->andReturn(\Mockery::self());
+
+        $result = $this->sut->update($requestMock, 'vendorname', 'test');
+
+        $this->assertInstanceOf('Illuminate\Http\RedirectResponse', $result);
+        $this->assertTrue($result->getSession()->has('adoadomin-alert'));
+
+        $alert = $result->getSession()->get('adoadomin-alert');
+
+        $this->assertEquals('success', $alert['type']);
+    }
+
+    public function test_update_saves_array_to_file_using_config_filediskdriver()
+    {
+        $requestMock = $this->mock('Illuminate\Http\Request');
+
+        config(['transleite.filedriver' => 'discdriver']);
+
+        $requestMock->shouldReceive('has')->with('translations')->times(1)->andReturn(true);
+        $requestMock->shouldReceive('input')->with('translations')->times(1)->andReturn($returnArray = [
+            'en' => [
+                'key' => 'value'
+            ],
+            'es' => [
+                'key' => 'value'
+            ]
+        ]);
+
+        Storage::shouldReceive('disc')->times(1)->with('discdriver')->andReturn(\Mockery::self());
+        Storage::shouldReceive('put')->times(1)->with('resources/lang/en/test.php', $returnArray['en'])->andReturn(\Mockery::self());
+        Storage::shouldReceive('put')->times(1)->with('resources/lang/es/test.php', $returnArray['es'])->andReturn(\Mockery::self());
+
+        $result = $this->sut->update($requestMock, 'test');
+
+        $this->assertInstanceOf('Illuminate\Http\RedirectResponse', $result);
+        $this->assertTrue($result->getSession()->has('adoadomin-alert'));
+
+        $alert = $result->getSession()->get('adoadomin-alert');
+
+        $this->assertEquals('success', $alert['type']);
+    }
 }

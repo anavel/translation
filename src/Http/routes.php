@@ -12,7 +12,7 @@ Route::group(
         ]);
 
         // Model CRUD routes
-        Route::get('{file}', [
+        Route::get('{param}/{param2?}', [
             'as'   => 'transleite.file.edit',
             'uses' => 'FileController@edit'
         ]);

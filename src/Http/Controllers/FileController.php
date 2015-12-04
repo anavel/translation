@@ -4,6 +4,7 @@
 namespace ANavallaSuiza\Transleite\Http\Controllers;
 
 use ANavallaSuiza\Adoadomin\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use RedirectResponse;
 use Storage;
 use View;
@@ -19,17 +20,8 @@ class FileController extends Controller
         $this->config = config('transleite.files');
     }
 
-    public function edit($fileKey)
+    public function edit($param, $param2 = null)
     {
-        /*
-         *
-         * config deberia ter un indice de arquivos de usuario (en resources/lang) e arquivos de vendor (en resources/lang/vendor)
-         * debería haber un arquivo por cada idioma (na súa carpeta). Se o arquivo non existe, créao. se non se establece tradución, a clave NON SE METE
-         *
-         *
-         *
-         */
-
         $editLangs = [];
 
         //Fallback must be empty, otherwise empty translations would show that lang
@@ -37,7 +29,8 @@ class FileController extends Controller
         $trans->setFallback('');
 
         foreach ($this->lang as $lang) {
-            $transResult = trans($fileKey, [], null, $lang);
+            $file = empty($param2) ? $param : "$param::$param2";
+            $transResult = trans($file, [], null, $lang);
             /*
              trans returns the original string if can't find the translation. Since we are not
             looking for a specifig line but a whole file, an array should be returned. If that's not the case, the file doesn't exist.
@@ -46,5 +39,38 @@ class FileController extends Controller
         }
 
         return View::make('transleite::pages.edit', compact('editLangs'));
+    }
+
+    public function update(Request $request, $param, $param2 = null)
+    {
+        if (! $request->has('translations')) {
+            session()->flash('adoadomin-alert', [
+                'type'  => 'error',
+                'icon'  => 'fa-error',
+                'title' => trans('transleite::messages.alert_empty_translations_title'),
+                'text'  => trans('transleite::messages.alert_empty_translations_text')
+            ]);
+
+            return redirect()->back()->withInput();
+        }
+
+        $translations = $request->input('translations');
+
+        $discDriver = config('transleite.filedriver', 'local');
+        $disc = Storage::disc($discDriver);
+
+        foreach ($this->lang as $lang) {
+            $fileRoute = empty($param2) ? 'resources/lang/' . $lang . '/' . $param . '.php' : 'resources/lang/vendor/' . $param .'/' . $lang . '/' . $param2 . '.php';
+            $disc->put($fileRoute, $translations[$lang]);
+        }
+
+
+        session()->flash('adoadomin-alert', [
+            'type'  => 'success',
+            'icon'  => 'fa-check',
+            'title' => trans('transleite::messages.alert_translations_saved_title'),
+            'text'  => trans('transleite::messages.alert_translations_saved_text')
+        ]);
+        return redirect()->back();
     }
 }
