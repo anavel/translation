@@ -38,12 +38,13 @@ class FileController extends Controller
 
         // Add back keys from fallback_locale to other langs that don't have them. This way all langs have the same keys
         // and it is easier for the user to translate and keep track of them.
-        if (! empty($editLangs[$fallback])) {
-            foreach ($editLangs as $langKey => $lang) {
+        foreach ($editLangs as $langKey => $lang) {
+            if (! empty($editLangs[$fallback])) {
                 if ($langKey === $fallback) {
                     continue;
                 }
-                $missingKeys = array_diff_key($editLangs[$fallback], $editLangs[$langKey]);
+                $missingKeys = $this->array_diff_key_recursive($editLangs[$fallback], $editLangs[$langKey]);
+
                 if (! empty($missingKeys)) {
                     foreach (array_keys($missingKeys) as $missingKey) {
                         $editLangs[$langKey][$missingKey] = $editLangs[$fallback][$missingKey];
@@ -51,6 +52,7 @@ class FileController extends Controller
                     $editLangsMissingKeys[$langKey] = array_keys($missingKeys);
                 }
             }
+            array_multisort($editLangs[$langKey]);
         }
 
 
@@ -102,5 +104,22 @@ class FileController extends Controller
         ]);
 
         return redirect()->back();
+    }
+
+    private function array_diff_key_recursive (array $arr1, array $arr2) {
+        $diff = array_diff_key($arr1, $arr2);
+        $intersect = array_intersect_key($arr1, $arr2);
+
+        foreach ($intersect as $k => $v) {
+            if (is_array($arr1[$k]) && is_array($arr2[$k])) {
+                $d = array_diff_key_recursive($arr1[$k], $arr2[$k]);
+
+                if ($d) {
+                    $diff[$k] = $d;
+                }
+            }
+        }
+
+        return $diff;
     }
 }
