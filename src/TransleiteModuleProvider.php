@@ -36,6 +36,9 @@ class TransleiteModuleProvider extends ModuleProvider
      */
     public function register()
     {
+        $this->mergeConfigFrom(__DIR__.'/../config/transleite.php', 'transleite');
+
+        $this->app->register('ANavallaSuiza\Transleite\Providers\ViewComposersServiceProvider');
 
     }
 
@@ -66,7 +69,7 @@ class TransleiteModuleProvider extends ModuleProvider
 
     public function hasSidebar()
     {
-        return false;
+        return true;
     }
 
     public function sidebarMenu()
