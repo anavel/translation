@@ -43,7 +43,7 @@ class FileController extends Controller
                 if ($langKey === $fallback) {
                     continue;
                 }
-                $missingKeys = $this->array_diff_key_recursive($editLangs[$fallback], $editLangs[$langKey]);
+                $missingKeys = $this->arrayDiffKeyRecursive($editLangs[$fallback], $editLangs[$langKey]);
 
                 if (! empty($missingKeys)) {
                     foreach (array_keys($missingKeys) as $missingKey) {
@@ -81,13 +81,7 @@ class FileController extends Controller
         $disk = Storage::disk($diskDriver);
 
         foreach ($this->lang as $lang) {
-            $translation = array_filter($translations[$lang], function ($item) {
-                if (empty($item)) {
-                    return false;
-                }
-
-                return true;
-            });
+            $translation = $this->arrayFilterRecursive($translations[$lang]);
             $fileRoute = empty($param2) ? $lang . '/' . $param . '.php' : 'vendor/' . $param . '/' . $lang . '/' . $param2 . '.php';
             $string = "<?php" . PHP_EOL . PHP_EOL;
             $string .= 'return ';
@@ -106,13 +100,13 @@ class FileController extends Controller
         return redirect()->back();
     }
 
-    private function array_diff_key_recursive (array $arr1, array $arr2) {
+    private function arrayDiffKeyRecursive(array $arr1, array $arr2) {
         $diff = array_diff_key($arr1, $arr2);
         $intersect = array_intersect_key($arr1, $arr2);
 
         foreach ($intersect as $k => $v) {
             if (is_array($arr1[$k]) && is_array($arr2[$k])) {
-                $d = array_diff_key_recursive($arr1[$k], $arr2[$k]);
+                $d = $this->arrayDiffKeyRecursive($arr1[$k], $arr2[$k]);
 
                 if ($d) {
                     $diff[$k] = $d;
@@ -121,5 +115,18 @@ class FileController extends Controller
         }
 
         return $diff;
+    }
+
+    private function arrayFilterRecursive(array $array)
+    {
+        foreach ($array as &$value)
+        {
+            if (is_array($value))
+            {
+                $value = $this->arrayFilterRecursive($value);
+            }
+        }
+
+        return array_filter($array);
     }
 }
