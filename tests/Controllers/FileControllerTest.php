@@ -122,7 +122,7 @@ class FileControllerTest extends TestBase
             ]
         ]);
 
-        Storage::shouldReceive('disc')->times(1)->with('local')->andReturn(\Mockery::self());
+        Storage::shouldReceive('disk')->times(1)->with('local')->andReturn(\Mockery::self());
         Storage::shouldReceive('put')->times(1)->with('resources/lang/en/test.php', $returnArray['en'])->andReturn(\Mockery::self());
         Storage::shouldReceive('put')->times(1)->with('resources/lang/es/test.php', $returnArray['es'])->andReturn(\Mockery::self());
 
@@ -150,7 +150,7 @@ class FileControllerTest extends TestBase
             ]
         ]);
 
-        Storage::shouldReceive('disc')->times(1)->with('local')->andReturn(\Mockery::self());
+        Storage::shouldReceive('disk')->times(1)->with('local')->andReturn(\Mockery::self());
         Storage::shouldReceive('put')->times(1)->with('resources/lang/vendor/vendorname/en/test.php', $returnArray['en'])->andReturn(\Mockery::self());
         Storage::shouldReceive('put')->times(1)->with('resources/lang/vendor/vendorname/es/test.php', $returnArray['es'])->andReturn(\Mockery::self());
 
@@ -168,7 +168,7 @@ class FileControllerTest extends TestBase
     {
         $requestMock = $this->mock('Illuminate\Http\Request');
 
-        config(['transleite.filedriver' => 'discdriver']);
+        config(['transleite.filedriver' => 'diskdriver']);
 
         $requestMock->shouldReceive('has')->with('translations')->times(1)->andReturn(true);
         $requestMock->shouldReceive('input')->with('translations')->times(1)->andReturn($returnArray = [
@@ -180,7 +180,7 @@ class FileControllerTest extends TestBase
             ]
         ]);
 
-        Storage::shouldReceive('disc')->times(1)->with('discdriver')->andReturn(\Mockery::self());
+        Storage::shouldReceive('disk')->times(1)->with('diskdriver')->andReturn(\Mockery::self());
         Storage::shouldReceive('put')->times(1)->with('resources/lang/en/test.php', $returnArray['en'])->andReturn(\Mockery::self());
         Storage::shouldReceive('put')->times(1)->with('resources/lang/es/test.php', $returnArray['es'])->andReturn(\Mockery::self());
 

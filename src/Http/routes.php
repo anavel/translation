@@ -16,5 +16,11 @@ Route::group(
             'as'   => 'transleite.file.edit',
             'uses' => 'FileController@edit'
         ]);
+
+        // Model CRUD routes
+        Route::put('{param}/{param2?}', [
+            'as'   => 'transleite.file.update',
+            'uses' => 'FileController@update'
+        ]);
     }
 );

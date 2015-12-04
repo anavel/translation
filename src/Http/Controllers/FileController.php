@@ -52,12 +52,12 @@ class FileController extends Controller
 
         $translations = $request->input('translations');
 
-        $discDriver = config('transleite.filedriver', 'local');
-        $disc = Storage::disc($discDriver);
+        $diskDriver = config('transleite.filedriver', 'local');
+        $disk = Storage::disk($diskDriver);
 
         foreach ($this->lang as $lang) {
             $fileRoute = empty($param2) ? 'resources/lang/' . $lang . '/' . $param . '.php' : 'resources/lang/vendor/' . $param .'/' . $lang . '/' . $param2 . '.php';
-            $disc->put($fileRoute, $translations[$lang]);
+            $disk->put($fileRoute, $translations[$lang]);
         }
 
 
