@@ -52,7 +52,7 @@ class FileController extends Controller
                     $editLangsMissingKeys[$langKey] = array_keys($missingKeys);
                 }
             }
-            array_multisort($editLangs[$langKey]);
+            $this->ksortTree($editLangs[$langKey]);
         }
 
 
@@ -100,7 +100,8 @@ class FileController extends Controller
         return redirect()->back();
     }
 
-    private function arrayDiffKeyRecursive(array $arr1, array $arr2) {
+    private function arrayDiffKeyRecursive(array $arr1, array $arr2)
+    {
         $diff = array_diff_key($arr1, $arr2);
         $intersect = array_intersect_key($arr1, $arr2);
 
@@ -119,14 +120,26 @@ class FileController extends Controller
 
     private function arrayFilterRecursive(array $array)
     {
-        foreach ($array as &$value)
-        {
-            if (is_array($value))
-            {
+        foreach ($array as &$value) {
+            if (is_array($value)) {
                 $value = $this->arrayFilterRecursive($value);
             }
         }
 
         return array_filter($array);
+    }
+
+    private function ksortTree(&$array)
+    {
+        if (! is_array($array)) {
+            return false;
+        }
+
+        ksort($array);
+        foreach ($array as $k => $v) {
+            $this->ksortTree($array[$k]);
+        }
+
+        return true;
     }
 }
