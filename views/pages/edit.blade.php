@@ -7,20 +7,14 @@
     </h1>
 @stop
 
-@section('breadcrumb')
-    {{--<ol class="breadcrumb">--}}
-    {{--<li><a href="{{ route('adoadomin-transleite.edit') }}"><i class="fa fa-language"></i> {{ config('adoadomin-transleite.name') }}</a></li>--}}
-    {{--<li class="active">{{ trans('transleite::messages.edit_title') }}</li>--}}
-    {{--</ol>--}}
-@stop
-
 @section('content')
     @if(! empty($editLangs))
-        <div class="nav-tabs-custom">
-            <form method="post" action="" id="transleite-form">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                <input type="hidden" name="_method" value="PUT">
+        <form method="post" action="" id="transleite-form">
 
+            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="_method" value="PUT">
+
+            <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
                     <?php $i = 0?>
                     @foreach (array_keys($editLangs) as $locale)
@@ -74,13 +68,40 @@
                         <?php $i++?>
                     @endforeach
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
+
+        {{--<form action="{{ route('transleite.file.create', [Route::input('param'), Route::input('param2')]) }}"--}}
+              {{--method="post">--}}
+            {{--<fieldset class="panel">--}}
+                {{--<legend>{{ trans('transleite::messages.new_line') }}</legend>--}}
+                {{--<div class="form-horizontal panel-body">--}}
+                    {{--<div class="form-group transleite-group">--}}
+                        {{--<label for="translations-new[key]" class="control-label col-lg-4">clave</label>--}}
+
+                        {{--<div class="col-lg-8">--}}
+                            {{--<input type="text" id="translations-new[key]" name="translations-new[key]"--}}
+                                   {{--class="form-control">--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
+                    {{--<div class="form-group transleite-group">--}}
+                        {{--<label for="translations-new[value]" class="control-label col-lg-4">clave</label>--}}
+
+                        {{--<div class="col-lg-8">--}}
+                                {{--<textarea id="translations-new[value]" name="translations-new[value]"--}}
+                                          {{--class="form-control"></textarea>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+
+                {{--<div class="panel-footer">--}}
+                    {{--<div class="pull-right">--}}
+                        {{--<button type="submit" class="btn btn-primary"><i--}}
+                                    {{--class="fa fa-save"></i> {{ trans('transleite::messages.new_button') }}--}}
+                        {{--</button>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+            {{--</fieldset>--}}
+        {{--</form>--}}
     @endif
 @stop
-
-{{--@section('footer-scripts')--}}
-{{--@parent--}}
-
-{{--    <script src="{{ asset('vendor/adoadomin-transleite/js/app.js') }}" type="text/javascript"></script>--}}
-{{--@stop--}}

@@ -39,6 +39,7 @@ class HomeControllerTest extends TestBase
 
     public function test_edit_throws_exception_if_no_files_configured()
     {
+        config(['transleite.files' => null]);
         $this->setExpectedException('Exception', 'No files configured');
 
         $this->sut->index('test');

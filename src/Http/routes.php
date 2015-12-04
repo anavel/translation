@@ -11,13 +11,16 @@ Route::group(
             'uses' => 'HomeController@index'
         ]);
 
-        // Model CRUD routes
         Route::get('{param}/{param2?}', [
             'as'   => 'transleite.file.edit',
             'uses' => 'FileController@edit'
         ]);
 
-        // Model CRUD routes
+//        Route::post('{param}/{param2?}', [
+//            'as'   => 'transleite.file.create',
+//            'uses' => 'FileController@create'
+//        ]);
+
         Route::put('{param}/{param2?}', [
             'as'   => 'transleite.file.update',
             'uses' => 'FileController@update'

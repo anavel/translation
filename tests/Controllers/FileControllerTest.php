@@ -257,4 +257,22 @@ return array (
 
         $result = $this->sut->update($requestMock, 'test');
     }
+
+
+//    public function test_create_bails_when_input_empty()
+//    {
+//        $requestMock = $this->mock('Illuminate\Http\Request');
+//
+//        $requestMock->shouldReceive('has')->with('translations-new')->times(1)->andReturn(false);
+//
+//        $result = $this->sut->create($requestMock, 'test');
+//
+//        $this->assertInstanceOf('Illuminate\Http\RedirectResponse', $result);
+//        $this->assertTrue($result->getSession()->has('adoadomin-alert'));
+//
+//        $alert = $result->getSession()->get('adoadomin-alert');
+//
+//        $this->assertEquals('error', $alert['type']);
+//    }
+
 }

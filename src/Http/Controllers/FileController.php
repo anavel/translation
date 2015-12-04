@@ -100,6 +100,20 @@ class FileController extends Controller
         return redirect()->back();
     }
 
+//    public function create(Request $request, $param, $param2 = null)
+//    {
+//        if (! $request->has('translations-new')) {
+//            session()->flash('adoadomin-alert', [
+//                'type'  => 'error',
+//                'icon'  => 'fa-error',
+//                'title' => trans('transleite::messages.alert_empty_new_translations_title'),
+//                'text'  => trans('transleite::messages.alert_empty_new_translations_text')
+//            ]);
+//
+//            return redirect()->back()->withInput();
+//        }
+//    }
+
     private function arrayDiffKeyRecursive(array $arr1, array $arr2)
     {
         $diff = array_diff_key($arr1, $arr2);
