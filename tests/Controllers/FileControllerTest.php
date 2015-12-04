@@ -54,7 +54,6 @@ class FileControllerTest extends TestBase
         \App::instance('translator', $transMock = $this->mock('Illuminate\Filesystem\Filesystem\FileLoader'));
         config(['transleite.files' => $this->config]);
 
-        $transMock->shouldReceive('setFallback')->andReturn('');
         $transMock->shouldReceive('trans')->andReturn(['yeah' => 'yeah']);
 
         $result = $this->sut->edit('test');
@@ -76,7 +75,6 @@ class FileControllerTest extends TestBase
         \App::instance('translator', $transMock = $this->mock('Illuminate\Filesystem\Filesystem\FileLoader'));
         config(['transleite.files' => $this->config]);
 
-        $transMock->shouldReceive('setFallback')->andReturn('');
         $transMock->shouldReceive('trans')->with('vendor::test', [], null,
             \Mockery::any())->andReturn(['yeah' => 'yeah']);
 

@@ -26,7 +26,7 @@ class HomeController extends Controller
         }
 
         if (array_key_exists('user', $files)) {
-            return new RedirectResponse(route('transleite.file.edit',  key($files['user'])));
+            return new RedirectResponse(route('transleite.file.edit',  $files['user'][0]));
         } else {
             $key = key($files['vendor']);
             return new RedirectResponse(route('transleite.file.edit',  [$key, $files['vendor'][$key]]));
