@@ -52,12 +52,18 @@ class FileController extends Controller
 
         $translations = $request->input('translations');
 
-        $diskDriver = config('transleite.filedriver', 'local');
+        $diskDriver = config('transleite.filedriver');
+        if (empty($diskDriver)) {
+            throw new \Exception('filedriver should be set in config');
+        }
         $disk = Storage::disk($diskDriver);
 
         foreach ($this->lang as $lang) {
-            $fileRoute = empty($param2) ? 'resources/lang/' . $lang . '/' . $param . '.php' : 'resources/lang/vendor/' . $param .'/' . $lang . '/' . $param2 . '.php';
-            $disk->put($fileRoute, $translations[$lang]);
+            $fileRoute = empty($param2) ? $lang . '/' . $param . '.php' : 'vendor/' . $param .'/' . $lang . '/' . $param2 . '.php';
+            $string = "<?php" . PHP_EOL;
+            $string .= 'return ';
+            $string .= var_export($translations[$lang], true) . ';';
+            $disk->put($fileRoute, $string);
         }
 
 

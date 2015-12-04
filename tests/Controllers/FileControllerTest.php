@@ -19,6 +19,8 @@ class FileControllerTest extends TestBase
         parent::setUp();
 
         config(['adoadomin.translation_languages' => ['en', 'es']]);
+        config(['transleite.filedriver' => 'diskdriver']);
+
 
         $this->sut = new FileController();
 
@@ -122,9 +124,9 @@ class FileControllerTest extends TestBase
             ]
         ]);
 
-        Storage::shouldReceive('disk')->times(1)->with('local')->andReturn(\Mockery::self());
-        Storage::shouldReceive('put')->times(1)->with('resources/lang/en/test.php', $returnArray['en'])->andReturn(\Mockery::self());
-        Storage::shouldReceive('put')->times(1)->with('resources/lang/es/test.php', $returnArray['es'])->andReturn(\Mockery::self());
+        Storage::shouldReceive('disk')->times(1)->with('diskdriver')->andReturn(\Mockery::self());
+        Storage::shouldReceive('put')->times(1)->with('en/test.php', \Mockery::any())->andReturn(\Mockery::self());
+        Storage::shouldReceive('put')->times(1)->with('es/test.php', \Mockery::any())->andReturn(\Mockery::self());
 
         $result = $this->sut->update($requestMock, 'test');
 
@@ -150,9 +152,9 @@ class FileControllerTest extends TestBase
             ]
         ]);
 
-        Storage::shouldReceive('disk')->times(1)->with('local')->andReturn(\Mockery::self());
-        Storage::shouldReceive('put')->times(1)->with('resources/lang/vendor/vendorname/en/test.php', $returnArray['en'])->andReturn(\Mockery::self());
-        Storage::shouldReceive('put')->times(1)->with('resources/lang/vendor/vendorname/es/test.php', $returnArray['es'])->andReturn(\Mockery::self());
+        Storage::shouldReceive('disk')->times(1)->with('diskdriver')->andReturn(\Mockery::self());
+        Storage::shouldReceive('put')->times(1)->with('vendor/vendorname/en/test.php', \Mockery::any())->andReturn(\Mockery::self());
+        Storage::shouldReceive('put')->times(1)->with('vendor/vendorname/es/test.php', \Mockery::any())->andReturn(\Mockery::self());
 
         $result = $this->sut->update($requestMock, 'vendorname', 'test');
 
@@ -164,11 +166,14 @@ class FileControllerTest extends TestBase
         $this->assertEquals('success', $alert['type']);
     }
 
-    public function test_update_saves_array_to_file_using_config_filediskdriver()
+    public function test_throws_exception_if_disk_not_set()
     {
+        $this->setExpectedException('Exception', 'filedriver should be set in config');
+
         $requestMock = $this->mock('Illuminate\Http\Request');
 
-        config(['transleite.filedriver' => 'diskdriver']);
+        config(['transleite.filedriver' => null]);
+
 
         $requestMock->shouldReceive('has')->with('translations')->times(1)->andReturn(true);
         $requestMock->shouldReceive('input')->with('translations')->times(1)->andReturn($returnArray = [
@@ -180,17 +185,6 @@ class FileControllerTest extends TestBase
             ]
         ]);
 
-        Storage::shouldReceive('disk')->times(1)->with('diskdriver')->andReturn(\Mockery::self());
-        Storage::shouldReceive('put')->times(1)->with('resources/lang/en/test.php', $returnArray['en'])->andReturn(\Mockery::self());
-        Storage::shouldReceive('put')->times(1)->with('resources/lang/es/test.php', $returnArray['es'])->andReturn(\Mockery::self());
-
         $result = $this->sut->update($requestMock, 'test');
-
-        $this->assertInstanceOf('Illuminate\Http\RedirectResponse', $result);
-        $this->assertTrue($result->getSession()->has('adoadomin-alert'));
-
-        $alert = $result->getSession()->get('adoadomin-alert');
-
-        $this->assertEquals('success', $alert['type']);
     }
 }
