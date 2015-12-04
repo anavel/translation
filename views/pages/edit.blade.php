@@ -28,9 +28,9 @@
                 <ul class="nav nav-tabs">
                     <?php $i = 0?>
                     @foreach (array_keys($editLangs) as $locale)
-                        <li role="presentation" class="{{ $i === 0 ? 'active' : ''}}"><a href="{{ '#' . $locale }}"
-                                                                                         role="tab"
-                                                                                         aria-controls="{{ $locale }}">{{ $locale }}</a>
+                        <li role="presentation" class="{{ $i === 0 ? 'active' : ''}}">
+                            <a href="{{ '#' . $locale }}" role="tab" data-toggle="tab"
+                               aria-controls="{{ $locale }}">{{ $locale }}</a>
                         </li>
                         <?php $i++?>
                     @endforeach
@@ -57,7 +57,7 @@
                                     @else
                                         <div class="form-group transleite-group">
                                             <label for="translations[{{ $langKey }}][{{ $lineKey }}]"
-                                                   class="control-label col-lg-4">{{ $lineKey }}</label>
+                                                   class="control-label col-lg-4 {{ ! empty($editLangsMissingKeys[$langKey]) && in_array($lineKey,$editLangsMissingKeys[$langKey]) ? 'text-primary' : '' }}">{{ $lineKey }}</label>
 
                                             <div class="col-lg-8">
                                                 <textarea id="translations[{{ $langKey }}][{{ $lineKey }}]"

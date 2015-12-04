@@ -23,6 +23,8 @@ class FileController extends Controller
     public function edit($param, $param2 = null)
     {
         $editLangs = [];
+        $editLangsMissingKeys = [];
+        $fallback = config('app.fallback_locale');
 
         foreach ($this->lang as $lang) {
             $file = empty($param2) ? $param : "$param::$param2";
@@ -34,7 +36,25 @@ class FileController extends Controller
             $editLangs[$lang] = is_array($transResult) ? $transResult : [];
         }
 
-        return View::make('transleite::pages.edit', compact('editLangs'));
+        // Add back keys from fallback_locale to other langs that don't have them. This way all langs have the same keys
+        // and it is easier for the user to translate and keep track of them.
+        if (! empty($editLangs[$fallback])) {
+            foreach ($editLangs as $langKey => $lang) {
+                if ($langKey === $fallback) {
+                    continue;
+                }
+                $missingKeys = array_diff_key($editLangs[$fallback], $editLangs[$langKey]);
+                if (! empty($missingKeys)) {
+                    foreach (array_keys($missingKeys) as $missingKey) {
+                        $editLangs[$langKey][$missingKey] = $editLangs[$fallback][$missingKey];
+                    }
+                    $editLangsMissingKeys[$langKey] = array_keys($missingKeys);
+                }
+            }
+        }
+
+
+        return View::make('transleite::pages.edit', compact('editLangs', 'editLangsMissingKeys'));
     }
 
     public function update(Request $request, $param, $param2 = null)

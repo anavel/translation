@@ -72,6 +72,40 @@ class FileControllerTest extends TestBase
         $this->assertArrayHasKey('yeah', $viewData['en']);
     }
 
+    public function test_edit_adds_missing_keys_from_fallback_locale()
+    {
+        \App::instance('translator', $transMock = $this->mock('Illuminate\Filesystem\Filesystem\FileLoader'));
+        config(['transleite.files' => $this->config]);
+
+        $transMock->shouldReceive('trans')->with('test', [], null, 'en')->andReturn([
+            'yeah' => 'yeah',
+            'ohyeah' => 'yeah',
+        ]);
+        $transMock->shouldReceive('trans')->with('test', [], null, 'es')->andReturn([
+            'yeah' => 'yeah'
+        ]);
+
+        $result = $this->sut->edit('test');
+
+        $this->assertObjectHasAttribute('data', $result);
+        $this->assertTrue($result->offsetExists('editLangs'));
+        $viewData = $result->offsetGet('editLangs');
+        $this->assertArrayHasKey('en', $viewData);
+        $this->assertArrayHasKey('es', $viewData);
+
+        $this->assertInternalType('array', $viewData['en']);
+        $this->assertInternalType('array', $viewData['es']);
+
+        $this->assertArrayHasKey('yeah', $viewData['en']);
+        $this->assertArrayHasKey('ohyeah', $viewData['es']);
+
+        $this->assertTrue($result->offsetExists('editLangsMissingKeys'));
+        $viewData = $result->offsetGet('editLangsMissingKeys');
+        $this->assertArrayHasKey('es', $viewData);
+        $this->assertInternalType('array', $viewData['es']);
+        $this->assertContains('ohyeah', $viewData['es']);
+    }
+
     public function test_calls_vendor_file_when_param2_not_empty()
     {
         \App::instance('translator', $transMock = $this->mock('Illuminate\Filesystem\Filesystem\FileLoader'));
@@ -153,8 +187,10 @@ class FileControllerTest extends TestBase
         ]);
 
         Storage::shouldReceive('disk')->times(1)->with('diskdriver')->andReturn(\Mockery::self());
-        Storage::shouldReceive('put')->times(1)->with('vendor/vendorname/en/test.php', \Mockery::any())->andReturn(\Mockery::self());
-        Storage::shouldReceive('put')->times(1)->with('vendor/vendorname/es/test.php', \Mockery::any())->andReturn(\Mockery::self());
+        Storage::shouldReceive('put')->times(1)->with('vendor/vendorname/en/test.php',
+            \Mockery::any())->andReturn(\Mockery::self());
+        Storage::shouldReceive('put')->times(1)->with('vendor/vendorname/es/test.php',
+            \Mockery::any())->andReturn(\Mockery::self());
 
         $result = $this->sut->update($requestMock, 'vendorname', 'test');
 
@@ -173,7 +209,7 @@ class FileControllerTest extends TestBase
         $requestMock->shouldReceive('has')->with('translations')->times(1)->andReturn(true);
         $requestMock->shouldReceive('input')->with('translations')->times(1)->andReturn($returnArray = [
             'en' => [
-                'key' => 'value',
+                'key'      => 'value',
                 'otherkey' => ''
             ],
             'es' => [
@@ -187,7 +223,8 @@ class FileControllerTest extends TestBase
 return array (
   \'key\' => \'value\',
 );')->andReturn(\Mockery::self());
-        Storage::shouldReceive('put')->times(1)->with('vendor/vendorname/es/test.php', \Mockery::any())->andReturn(\Mockery::self());
+        Storage::shouldReceive('put')->times(1)->with('vendor/vendorname/es/test.php',
+            \Mockery::any())->andReturn(\Mockery::self());
 
         $result = $this->sut->update($requestMock, 'vendorname', 'test');
 
@@ -197,11 +234,6 @@ return array (
         $alert = $result->getSession()->get('adoadomin-alert');
 
         $this->assertEquals('success', $alert['type']);
-    }
-
-    public function test_update_merges_keys_from_fallback_locale()
-    {
-        
     }
 
     public function test_throws_exception_if_disk_not_set()
