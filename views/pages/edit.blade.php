@@ -7,14 +7,14 @@
 @section('content-header')
     <h1>
         {{ config('adoadomin-transleite.name') }}
-        <small>{{ trans('adoadomin-transleite::messages.edit_title') }}</small>
+        <small>{{ trans('transleite::messages.edit_title') }}</small>
     </h1>
 @stop
 
 @section('breadcrumb')
     {{--<ol class="breadcrumb">--}}
     {{--<li><a href="{{ route('adoadomin-transleite.edit') }}"><i class="fa fa-language"></i> {{ config('adoadomin-transleite.name') }}</a></li>--}}
-    {{--<li class="active">{{ trans('adoadomin-transleite::messages.edit_title') }}</li>--}}
+    {{--<li class="active">{{ trans('transleite::messages.edit_title') }}</li>--}}
     {{--</ol>--}}
 @stop
 
@@ -37,7 +37,7 @@
 
                     <li class="pull-right">
                         <button type="submit" class="btn btn-primary"><i
-                                    class="fa fa-save"></i> {{ trans('adoadomin-transleite::messages.save_button') }}
+                                    class="fa fa-save"></i> {{ trans('transleite::messages.save_button') }}
                         </button>
                     </li>
                 </ul>
@@ -71,7 +71,7 @@
 
                             <div class="box-footer clearfix">
                                 <button type="submit" class="btn btn-primary pull-right"><i
-                                            class="fa fa-save"></i> {{ trans('adoadomin-transleite::messages.save_button') }}
+                                            class="fa fa-save"></i> {{ trans('transleite::messages.save_button') }}
                                 </button>
                             </div>
                         </div>
