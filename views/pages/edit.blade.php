@@ -1,9 +1,5 @@
 @extends('adoadomin::layouts.master')
 
-@section('body-classes')
-    sidebar-collapse
-@stop
-
 @section('content-header')
     <h1>
         {{ config('adoadomin-transleite.name') }}
