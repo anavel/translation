@@ -16,10 +16,10 @@ Route::group(
             'uses' => 'FileController@edit'
         ]);
 
-//        Route::post('{param}/{param2?}', [
-//            'as'   => 'transleite.file.create',
-//            'uses' => 'FileController@create'
-//        ]);
+        Route::post('{param}/{param2?}', [
+            'as'   => 'transleite.file.create',
+            'uses' => 'FileController@create'
+        ]);
 
         Route::put('{param}/{param2?}', [
             'as'   => 'transleite.file.update',
