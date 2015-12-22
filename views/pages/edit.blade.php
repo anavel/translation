@@ -73,6 +73,7 @@
 
         <form action="{{ route('transleite.file.create', [Route::input('param'), Route::input('param2')]) }}"
               method="post">
+            <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <fieldset class="panel">
                 <legend>{{ trans('transleite::messages.new_line') }}</legend>
                 <div class="form-horizontal panel-body">
