@@ -86,7 +86,7 @@ class FileController extends Controller
             'text'  => trans('transleite::messages.alert_translations_saved_text')
         ]);
 
-        return redirect()->route('transleite.file.create', [$param, $param2]);
+        return redirect()->route('transleite.file.edit', [$param, $param2]);
     }
 
     public function create(Request $request, $param, $param2 = null)
@@ -125,7 +125,7 @@ class FileController extends Controller
             'text'  => trans('transleite::messages.alert_translations_saved_text')
         ]);
 
-        return redirect()->route('transleite.file.create', [$param, $param2]);
+        return redirect()->route('transleite.file.edit', [$param, $param2]);
     }
 
     protected function getDisk()
