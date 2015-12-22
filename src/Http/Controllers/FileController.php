@@ -33,6 +33,7 @@ class FileController extends Controller
         foreach ($editLangs as $langKey => $lang) {
             if (! empty($editLangs[$this->fallback])) {
                 if ($langKey === $this->fallback) {
+                    $this->ksortTree($editLangs[$langKey]);
                     continue;
                 }
                 $missingKeys = $this->arrayDiffKeyRecursive($editLangs[$this->fallback], $editLangs[$langKey]);
@@ -85,7 +86,7 @@ class FileController extends Controller
             'text'  => trans('transleite::messages.alert_translations_saved_text')
         ]);
 
-        return redirect()->back();
+        return redirect()->route('transleite.file.create', [$param, $param2]);
     }
 
     public function create(Request $request, $param, $param2 = null)
@@ -124,7 +125,7 @@ class FileController extends Controller
             'text'  => trans('transleite::messages.alert_translations_saved_text')
         ]);
 
-        return redirect()->back();
+        return redirect()->route('transleite.file.create', [$param, $param2]);
     }
 
     protected function getDisk()
