@@ -71,37 +71,37 @@
             </div>
         </form>
 
-        {{--<form action="{{ route('transleite.file.create', [Route::input('param'), Route::input('param2')]) }}"--}}
-              {{--method="post">--}}
-            {{--<fieldset class="panel">--}}
-                {{--<legend>{{ trans('transleite::messages.new_line') }}</legend>--}}
-                {{--<div class="form-horizontal panel-body">--}}
-                    {{--<div class="form-group transleite-group">--}}
-                        {{--<label for="translations-new[key]" class="control-label col-lg-4">clave</label>--}}
+        <form action="{{ route('transleite.file.create', [Route::input('param'), Route::input('param2')]) }}"
+              method="post">
+            <fieldset class="panel">
+                <legend>{{ trans('transleite::messages.new_line') }}</legend>
+                <div class="form-horizontal panel-body">
+                    <div class="form-group transleite-group">
+                        <label for="translations-new[key]" class="control-label col-lg-4">{{ trans('transleite::messages.new_line_key_label') }}</label>
 
-                        {{--<div class="col-lg-8">--}}
-                            {{--<input type="text" id="translations-new[key]" name="translations-new[key]"--}}
-                                   {{--class="form-control">--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
-                    {{--<div class="form-group transleite-group">--}}
-                        {{--<label for="translations-new[value]" class="control-label col-lg-4">clave</label>--}}
+                        <div class="col-lg-8">
+                            <input type="text" id="translations-new[key]" name="translations-new[key]"
+                                   class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group transleite-group">
+                        <label for="translations-new[value]" class="control-label col-lg-4">{{ trans('transleite::messages.new_line_key_label') }}</label>
 
-                        {{--<div class="col-lg-8">--}}
-                                {{--<textarea id="translations-new[value]" name="translations-new[value]"--}}
-                                          {{--class="form-control"></textarea>--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
+                        <div class="col-lg-8">
+                                <textarea id="translations-new[value]" name="translations-new[value]"
+                                          class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
 
-                {{--<div class="panel-footer">--}}
-                    {{--<div class="pull-right">--}}
-                        {{--<button type="submit" class="btn btn-primary"><i--}}
-                                    {{--class="fa fa-save"></i> {{ trans('transleite::messages.new_button') }}--}}
-                        {{--</button>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
-            {{--</fieldset>--}}
-        {{--</form>--}}
+                <div class="panel-footer">
+                    <div class="pull-right">
+                        <button type="submit" class="btn btn-primary"><i
+                                    class="fa fa-save"></i> {{ trans('transleite::messages.new_button') }}
+                        </button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
     @endif
 @stop

@@ -20,6 +20,8 @@ class FileControllerTest extends TestBase
 
         config(['adoadomin.translation_languages' => ['en', 'es']]);
         config(['transleite.filedriver' => 'diskdriver']);
+        config(['app.fallback_locale' => 'en']);
+
 
 
         $this->sut = new FileController();
@@ -78,7 +80,7 @@ class FileControllerTest extends TestBase
         config(['transleite.files' => $this->config]);
 
         $transMock->shouldReceive('trans')->with('test', [], null, 'en')->andReturn([
-            'yeah' => 'yeah',
+            'yeah'   => 'yeah',
             'ohyeah' => 'yeah',
         ]);
         $transMock->shouldReceive('trans')->with('test', [], null, 'es')->andReturn([
@@ -106,7 +108,7 @@ class FileControllerTest extends TestBase
         $this->assertContains('ohyeah', $viewData['es']);
     }
 
-    public function test_calls_vendor_file_when_param2_not_empty()
+    public function test_edit_calls_vendor_file_when_param2_not_empty()
     {
         \App::instance('translator', $transMock = $this->mock('Illuminate\Filesystem\Filesystem\FileLoader'));
         config(['transleite.files' => $this->config]);
@@ -236,7 +238,7 @@ return array (
         $this->assertEquals('success', $alert['type']);
     }
 
-    public function test_throws_exception_if_disk_not_set()
+    public function test_update_throws_exception_if_disk_not_set()
     {
         $this->setExpectedException('Exception', 'filedriver should be set in config');
 
@@ -259,20 +261,61 @@ return array (
     }
 
 
-//    public function test_create_bails_when_input_empty()
-//    {
-//        $requestMock = $this->mock('Illuminate\Http\Request');
-//
-//        $requestMock->shouldReceive('has')->with('translations-new')->times(1)->andReturn(false);
-//
-//        $result = $this->sut->create($requestMock, 'test');
-//
-//        $this->assertInstanceOf('Illuminate\Http\RedirectResponse', $result);
-//        $this->assertTrue($result->getSession()->has('adoadomin-alert'));
-//
-//        $alert = $result->getSession()->get('adoadomin-alert');
-//
-//        $this->assertEquals('error', $alert['type']);
-//    }
+    public function test_create_bails_when_input_empty()
+    {
+        $requestMock = $this->mock('Illuminate\Http\Request');
+
+        $requestMock->shouldReceive('has')->with('translations-new')->times(1)->andReturn(false);
+
+        $result = $this->sut->create($requestMock, 'test');
+
+        $this->assertInstanceOf('Illuminate\Http\RedirectResponse', $result);
+        $this->assertTrue($result->getSession()->has('adoadomin-alert'));
+
+        $alert = $result->getSession()->get('adoadomin-alert');
+
+        $this->assertEquals('error', $alert['type']);
+    }
+
+    public function test_create_throws_exception_if_disk_not_set()
+    {
+        $this->setExpectedException('Exception', 'filedriver should be set in config');
+
+        $requestMock = $this->mock('Illuminate\Http\Request');
+
+        config(['transleite.filedriver' => null]);
+
+
+        $requestMock->shouldReceive('has')->with('translations-new')->times(1)->andReturn(true);
+        $requestMock->shouldReceive('input')->with('translations-new')->times(1)->andReturn($returnArray = [
+            'key'   => 'somekey',
+            'value' => 'somevalue'
+        ]);
+
+        $result = $this->sut->create($requestMock, 'test');
+    }
+
+    public function test_create_adds_simple_line_to_fallback_locale()
+    {
+        $requestMock = $this->mock('Illuminate\Http\Request');
+
+        $requestMock->shouldReceive('has')->with('translations-new')->times(1)->andReturn(true);
+        $requestMock->shouldReceive('input')->with('translations-new')->times(1)->andReturn($returnArray = [
+            'key'   => 'somekey',
+            'value' => 'somevalue'
+        ]);
+
+        Storage::shouldReceive('disk')->times(1)->with('diskdriver')->andReturn(\Mockery::self());
+        Storage::shouldReceive('put')->times(1)->with('en/test.php', \Mockery::any())->andReturn(\Mockery::self());
+
+        $result = $this->sut->create($requestMock, 'test');
+
+        $this->assertInstanceOf('Illuminate\Http\RedirectResponse', $result);
+        $this->assertTrue($result->getSession()->has('adoadomin-alert'));
+
+        $alert = $result->getSession()->get('adoadomin-alert');
+
+        $this->assertEquals('success', $alert['type']);
+    }
 
 }

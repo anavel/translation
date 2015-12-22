@@ -13,41 +13,33 @@ class FileController extends Controller
 {
     protected $lang = [];
     protected $config = [];
+    protected $fallback;
 
     public function __construct()
     {
         $this->lang = config('adoadomin.translation_languages');
         $this->config = config('transleite.files');
+        $this->fallback = config('app.fallback_locale');
     }
 
     public function edit($param, $param2 = null)
     {
-        $editLangs = [];
         $editLangsMissingKeys = [];
-        $fallback = config('app.fallback_locale');
 
-        foreach ($this->lang as $lang) {
-            $file = empty($param2) ? $param : "$param::$param2";
-            $transResult = trans($file, [], null, $lang);
-            /*
-             trans returns the original string if can't find the translation. Since we are not
-            looking for a specifig line but a whole file, an array should be returned. If that's not the case, the file doesn't exist.
-             */
-            $editLangs[$lang] = is_array($transResult) ? $transResult : [];
-        }
+        $editLangs = $this->buildLangsArray($param, $param2);
 
         // Add back keys from fallback_locale to other langs that don't have them. This way all langs have the same keys
         // and it is easier for the user to translate and keep track of them.
         foreach ($editLangs as $langKey => $lang) {
-            if (! empty($editLangs[$fallback])) {
-                if ($langKey === $fallback) {
+            if (! empty($editLangs[$this->fallback])) {
+                if ($langKey === $this->fallback) {
                     continue;
                 }
-                $missingKeys = $this->arrayDiffKeyRecursive($editLangs[$fallback], $editLangs[$langKey]);
+                $missingKeys = $this->arrayDiffKeyRecursive($editLangs[$this->fallback], $editLangs[$langKey]);
 
                 if (! empty($missingKeys)) {
                     foreach (array_keys($missingKeys) as $missingKey) {
-                        $editLangs[$langKey][$missingKey] = $editLangs[$fallback][$missingKey];
+                        $editLangs[$langKey][$missingKey] = $editLangs[$this->fallback][$missingKey];
                     }
                     $editLangsMissingKeys[$langKey] = array_keys($missingKeys);
                 }
@@ -74,11 +66,7 @@ class FileController extends Controller
 
         $translations = $request->input('translations');
 
-        $diskDriver = config('transleite.filedriver');
-        if (empty($diskDriver)) {
-            throw new \Exception('filedriver should be set in config');
-        }
-        $disk = Storage::disk($diskDriver);
+        $disk = $this->getDisk();
 
         foreach ($this->lang as $lang) {
             $translation = $this->arrayFilterRecursive($translations[$lang]);
@@ -100,21 +88,72 @@ class FileController extends Controller
         return redirect()->back();
     }
 
-//    public function create(Request $request, $param, $param2 = null)
-//    {
-//        if (! $request->has('translations-new')) {
-//            session()->flash('adoadomin-alert', [
-//                'type'  => 'error',
-//                'icon'  => 'fa-error',
-//                'title' => trans('transleite::messages.alert_empty_new_translations_title'),
-//                'text'  => trans('transleite::messages.alert_empty_new_translations_text')
-//            ]);
-//
-//            return redirect()->back()->withInput();
-//        }
-//    }
+    public function create(Request $request, $param, $param2 = null)
+    {
+        if (! $request->has('translations-new')) {
+            session()->flash('adoadomin-alert', [
+                'type'  => 'error',
+                'icon'  => 'fa-error',
+                'title' => trans('transleite::messages.alert_empty_new_translations_title'),
+                'text'  => trans('transleite::messages.alert_empty_new_translations_text')
+            ]);
 
-    private function arrayDiffKeyRecursive(array $arr1, array $arr2)
+            return redirect()->back()->withInput();
+        }
+
+        $newLine = $request->input('translations-new');
+
+        $langs = $this->buildLangsArray($param, $param2);
+
+        $disk = $this->getDisk();
+
+        //We'll only add this line to the main lang
+        $translation = $langs[$this->fallback];
+        $translation[$newLine['key']] = $newLine['value'];
+
+        $fileRoute = empty($param2) ? $this->fallback . '/' . $param . '.php' : 'vendor/' . $param . '/' . $this->fallback . '/' . $param2 . '.php';
+        $string = "<?php" . PHP_EOL . PHP_EOL;
+        $string .= 'return ';
+        $string .= var_export($translation, true) . ';';
+        $disk->put($fileRoute, $string);
+
+        session()->flash('adoadomin-alert', [
+            'type'  => 'success',
+            'icon'  => 'fa-check',
+            'title' => trans('transleite::messages.alert_translations_saved_title'),
+            'text'  => trans('transleite::messages.alert_translations_saved_text')
+        ]);
+
+        return redirect()->back();
+    }
+
+    protected function getDisk()
+    {
+        $diskDriver = config('transleite.filedriver');
+        if (empty($diskDriver)) {
+            throw new \Exception('filedriver should be set in config');
+        }
+
+        return Storage::disk($diskDriver);
+    }
+
+    protected function buildLangsArray($param, $param2 = null)
+    {
+        $langs = [];
+        foreach ($this->lang as $lang) {
+            $file = empty($param2) ? $param : "$param::$param2";
+            $transResult = trans($file, [], null, $lang);
+            /*
+             trans returns the original string if it can't find the translation. Since we are not
+            looking for a specific line but a whole file, an array should be returned. If that's not the case, the file doesn't exist.
+             */
+            $langs[$lang] = is_array($transResult) ? $transResult : [];
+        }
+
+        return $langs;
+    }
+
+    protected function arrayDiffKeyRecursive(array $arr1, array $arr2)
     {
         $diff = array_diff_key($arr1, $arr2);
         $intersect = array_intersect_key($arr1, $arr2);
@@ -132,7 +171,7 @@ class FileController extends Controller
         return $diff;
     }
 
-    private function arrayFilterRecursive(array $array)
+    protected function arrayFilterRecursive(array $array)
     {
         foreach ($array as &$value) {
             if (is_array($value)) {
@@ -153,7 +192,7 @@ class FileController extends Controller
      *
      * @param array $array
      */
-    private function ksortTree(&$array)
+    protected function ksortTree(&$array)
     {
         if (! is_array($array)) {
             return false;
