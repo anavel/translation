@@ -26,7 +26,7 @@ class FileController extends Controller
     {
         $editLangsMissingKeys = [];
 
-        $editLangs = $this->buildLangsArray($param, $param2);
+        $editLangs = $this->getLangsFromFile($param, $param2);
 
         // Add back keys from fallback_locale to other langs that don't have them. This way all langs have the same keys
         // and it is easier for the user to translate and keep track of them.
@@ -104,13 +104,30 @@ class FileController extends Controller
 
         $newLine = $request->input('translations-new');
 
-        $langs = $this->buildLangsArray($param, $param2);
+
+        $langs = $this->getLangsFromFile($param, $param2);
 
         $disk = $this->getDisk();
 
         //We'll only add this line to the main lang
         $translation = $langs[$this->fallback];
-        $translation[$newLine['key']] = $newLine['value'];
+
+        //http://stackoverflow.com/questions/1417019/how-to-recursively-create-a-multidimensional-array#1417033
+
+        $key = $newLine['key'];
+        $val = $newLine['value'];
+        $path = explode('.', $key);
+
+        $newTranslation = array();
+        $tmp = &$newTranslation;
+        foreach ($path as $segment) {
+            $tmp[$segment] = array();
+            $tmp = &$tmp[$segment];
+        }
+        $tmp = $val;
+
+        $translation[key($newTranslation)] = $newTranslation[key($newTranslation)];
+
 
         $fileRoute = empty($param2) ? $this->fallback . '/' . $param . '.php' : 'vendor/' . $param . '/' . $this->fallback . '/' . $param2 . '.php';
         $string = "<?php" . PHP_EOL . PHP_EOL;
@@ -138,7 +155,7 @@ class FileController extends Controller
         return Storage::disk($diskDriver);
     }
 
-    protected function buildLangsArray($param, $param2 = null)
+    protected function getLangsFromFile($param, $param2 = null)
     {
         $langs = [];
         foreach ($this->lang as $lang) {

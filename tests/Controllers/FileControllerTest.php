@@ -23,7 +23,6 @@ class FileControllerTest extends TestBase
         config(['app.fallback_locale' => 'en']);
 
 
-
         $this->sut = new FileController();
 
         $this->config = [
@@ -307,6 +306,40 @@ return array (
 
         Storage::shouldReceive('disk')->times(1)->with('diskdriver')->andReturn(\Mockery::self());
         Storage::shouldReceive('put')->times(1)->with('en/test.php', \Mockery::any())->andReturn(\Mockery::self());
+
+        $result = $this->sut->create($requestMock, 'test');
+
+        $this->assertInstanceOf('Illuminate\Http\RedirectResponse', $result);
+        $this->assertTrue($result->getSession()->has('adoadomin-alert'));
+
+        $alert = $result->getSession()->get('adoadomin-alert');
+
+        $this->assertEquals('success', $alert['type']);
+    }
+
+    public function test_create_adds_array_line_to_fallback_locale()
+    {
+        $requestMock = $this->mock('Illuminate\Http\Request');
+
+        $requestMock->shouldReceive('has')->with('translations-new')->times(1)->andReturn(true);
+        $requestMock->shouldReceive('input')->with('translations-new')->times(1)->andReturn($returnArray = [
+            'key'   => 'some.arrayKey',
+            'value' => 'somevalue'
+        ]);
+
+        $finalArray = [
+            'some' =>
+                [
+                    'arrayKey' => 'somevalue',
+                ],
+        ];
+
+        $finalString = "<?php" . PHP_EOL . PHP_EOL;
+        $finalString .= 'return ';
+        $finalString .= var_export($finalArray, true) . ';';
+
+        Storage::shouldReceive('disk')->times(1)->with('diskdriver')->andReturn(\Mockery::self());
+        Storage::shouldReceive('put')->times(1)->with('en/test.php', $finalString)->andReturn(\Mockery::self());
 
         $result = $this->sut->create($requestMock, 'test');
 
