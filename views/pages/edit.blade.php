@@ -95,7 +95,7 @@
                     </div>
                 </div>
 
-                <div class="panel-footer">
+                <div class="panel-footer clearfix">
                     <div class="pull-right">
                         <button type="submit" class="btn btn-primary"><i
                                     class="fa fa-save"></i> {{ trans('transleite::messages.new_button') }}
