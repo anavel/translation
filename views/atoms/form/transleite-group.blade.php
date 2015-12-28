@@ -3,7 +3,7 @@
     @foreach ($group as $childLineKey => $childLine)
         @if(is_array($childLine))
             @include('transleite::atoms.form.transleite-group', [
-                'groupTitle' => $groupTitle . ' | ' .$lineKey,
+                'groupTitle' => $groupTitle . ' | ' .$childLineKey,
                 'group' => $childLine,
                 'formElementID' => "{$formElementID}[{$childLineKey}]"
             ])
