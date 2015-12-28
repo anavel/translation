@@ -82,11 +82,11 @@
 
                         <div class="col-lg-8">
                             <input type="text" id="translations-new[key]" name="translations-new[key]"
-                                   class="form-control">
+                                   class="form-control" placeholder="{{ trans('transleite::messages.new_line_key_placeholder') }}">
                         </div>
                     </div>
                     <div class="form-group transleite-group">
-                        <label for="translations-new[value]" class="control-label col-lg-4">{{ trans('transleite::messages.new_line_key_label') }}</label>
+                        <label for="translations-new[value]" class="control-label col-lg-4">{{ trans('transleite::messages.new_line_value_label') }}</label>
 
                         <div class="col-lg-8">
                                 <textarea id="translations-new[value]" name="translations-new[value]"

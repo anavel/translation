@@ -21,4 +21,9 @@ return [
     'alert_translations_destroy_text'  => 'El elemento ha sido borrado correctamente',
     'alert_empty_translations_title'   => '¡Nada que actualizar!',
     'alert_empty_translations_text'    => 'No se han recibido traducciones',
+    'new_line'                         => 'Nueva línea de traducción',
+    'new_line_key_label'               => 'Clave',
+    'new_line_key_placeholder'         => 'Puedes crear arrays usando puntos: claveprincipal.clave',
+    'new_line_value_label'             => 'Traducción',
+    'new_button'                       => 'Añadir nueva',
 ];

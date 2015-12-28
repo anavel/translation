@@ -21,4 +21,9 @@ return [
     'alert_translations_destroy_text'  => 'The item was deleted successfully',
     'alert_empty_translations_title'   => 'Nothing to update!',
     'alert_empty_translations_text'    => 'No translations sent',
+    'new_line'                         => 'New translation line',
+    'new_line_key_label'               => 'Key',
+    'new_line_key_placeholder'         => 'You can create arrays using dots: mainkey.key',
+    'new_line_value_label'             => 'Translation',
+    'new_button'                       => 'Add new',
 ];
