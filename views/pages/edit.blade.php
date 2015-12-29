@@ -9,32 +9,33 @@
 
 @section('content')
     @if(! empty($editLangs))
-        <form method="post" action="" id="transleite-form">
 
-            <input type="hidden" name="_token" value="{{ csrf_token() }}">
-            <input type="hidden" name="_method" value="PUT">
 
-            <div class="nav-tabs-custom">
-                <ul class="nav nav-tabs">
-                    <?php $i = 0?>
-                    @foreach (array_keys($editLangs) as $locale)
-                        <li role="presentation" class="{{ $i === 0 ? 'active' : ''}}">
-                            <a href="{{ '#' . $locale }}" role="tab" data-toggle="tab"
-                               aria-controls="{{ $locale }}">{{ $locale }}</a>
-                        </li>
-                        <?php $i++?>
-                    @endforeach
-
-                    <li class="pull-right">
-                        <button type="submit" class="btn btn-primary"><i
-                                    class="fa fa-save"></i> {{ trans('transleite::messages.save_button') }}
-                        </button>
+        <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+                <?php $i = 0?>
+                @foreach (array_keys($editLangs) as $locale)
+                    <li role="presentation" class="{{ $i === 0 ? 'active' : ''}}">
+                        <a href="{{ '#' . $locale }}" role="tab" data-toggle="tab"
+                           aria-controls="{{ $locale }}">{{ $locale }}</a>
                     </li>
-                </ul>
+                    <?php $i++?>
+                @endforeach
 
-                <div class="tab-content">
-                    <?php $i = 0?>
-                    @foreach($editLangs as $langKey => $langLines)
+                <li class="pull-right">
+                    <button type="submit" class="btn btn-primary"><i
+                                class="fa fa-save"></i> {{ trans('transleite::messages.save_button') }}
+                    </button>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <?php $i = 0?>
+                @foreach($editLangs as $langKey => $langLines)
+                    <form method="post" action="" id="transleite-form-{{ $langKey }}">
+
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="_method" value="PUT">
                         <div role="tabpanel" class="tab-pane {{ $i === 0 ? 'active' : ''}}" id="{{ $langKey }}">
                             <div class="form-horizontal">
                                 @foreach ($langLines as $lineKey => $line)
@@ -65,11 +66,11 @@
                                 </button>
                             </div>
                         </div>
-                        <?php $i++?>
-                    @endforeach
-                </div>
+                    </form>
+                    <?php $i++?>
+                @endforeach
             </div>
-        </form>
+        </div>
 
         <form action="{{ route('transleite.file.create', [Route::input('param'), Route::input('param2')]) }}"
               method="post">
@@ -78,15 +79,18 @@
                 <legend>{{ trans('transleite::messages.new_line') }}</legend>
                 <div class="form-horizontal panel-body">
                     <div class="form-group transleite-group">
-                        <label for="translations-new[key]" class="control-label col-lg-4">{{ trans('transleite::messages.new_line_key_label') }}</label>
+                        <label for="translations-new[key]"
+                               class="control-label col-lg-4">{{ trans('transleite::messages.new_line_key_label') }}</label>
 
                         <div class="col-lg-8">
                             <input type="text" id="translations-new[key]" name="translations-new[key]"
-                                   class="form-control" placeholder="{{ trans('transleite::messages.new_line_key_placeholder') }}">
+                                   class="form-control"
+                                   placeholder="{{ trans('transleite::messages.new_line_key_placeholder') }}">
                         </div>
                     </div>
                     <div class="form-group transleite-group">
-                        <label for="translations-new[value]" class="control-label col-lg-4">{{ trans('transleite::messages.new_line_value_label') }}</label>
+                        <label for="translations-new[value]"
+                               class="control-label col-lg-4">{{ trans('transleite::messages.new_line_value_label') }}</label>
 
                         <div class="col-lg-8">
                                 <textarea id="translations-new[value]" name="translations-new[value]"
