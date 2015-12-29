@@ -70,12 +70,14 @@ class FileController extends Controller
         $disk = $this->getDisk();
 
         foreach ($this->lang as $lang) {
-            $translation = $this->arrayFilterRecursive($translations[$lang]);
-            $fileRoute = empty($param2) ? $lang . '/' . $param . '.php' : 'vendor/' . $param . '/' . $lang . '/' . $param2 . '.php';
-            $string = "<?php" . PHP_EOL . PHP_EOL;
-            $string .= 'return ';
-            $string .= var_export($translation, true) . ';';
-            $disk->put($fileRoute, $string);
+            if (! empty($translations[$lang])) {
+                $translation = $this->arrayFilterRecursive($translations[$lang]);
+                $fileRoute = empty($param2) ? $lang . '/' . $param . '.php' : 'vendor/' . $param . '/' . $lang . '/' . $param2 . '.php';
+                $string = "<?php" . PHP_EOL . PHP_EOL;
+                $string .= 'return ';
+                $string .= var_export($translation, true) . ';';
+                $disk->put($fileRoute, $string);
+            }
         }
 
 

@@ -9,8 +9,6 @@
 
 @section('content')
     @if(! empty($editLangs))
-
-
         <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
                 <?php $i = 0?>
@@ -21,22 +19,15 @@
                     </li>
                     <?php $i++?>
                 @endforeach
-
-                <li class="pull-right">
-                    <button type="submit" class="btn btn-primary"><i
-                                class="fa fa-save"></i> {{ trans('transleite::messages.save_button') }}
-                    </button>
-                </li>
             </ul>
 
             <div class="tab-content">
                 <?php $i = 0?>
                 @foreach($editLangs as $langKey => $langLines)
-                    <form method="post" action="" id="transleite-form-{{ $langKey }}">
-
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                        <input type="hidden" name="_method" value="PUT">
-                        <div role="tabpanel" class="tab-pane {{ $i === 0 ? 'active' : ''}}" id="{{ $langKey }}">
+                    <div role="tabpanel" class="tab-pane {{ $i === 0 ? 'active' : ''}}" id="{{ $langKey }}">
+                        <form method="post" action="" id="transleite-form-{{ $langKey }}">
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                            <input type="hidden" name="_method" value="PUT">
                             <div class="form-horizontal">
                                 @foreach ($langLines as $lineKey => $line)
                                     @if(is_array($line))
@@ -65,8 +56,8 @@
                                             class="fa fa-save"></i> {{ trans('transleite::messages.save_button') }}
                                 </button>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                     <?php $i++?>
                 @endforeach
             </div>
