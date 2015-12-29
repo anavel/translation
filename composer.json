@@ -1,5 +1,5 @@
 {
-    "name": "anavallasuiza/adoadomin-transleite",
+    "name": "anavallasuiza/adobadomin-transleite",
     "description": "Manage translations",
     "authors": [
         {
@@ -15,7 +15,7 @@
         "php": ">=5.5.9",
         "illuminate/support": "5.1.*",
         "illuminate/translation": "5.1.*",
-        "anavallasuiza/adoadomin": "dev-master"
+        "anavallasuiza/adobadomin": "dev-master"
     },
     "require-dev": {
         "orchestra/testbench": "~3.1",
@@ -23,12 +23,6 @@
         "whatthejeff/nyancat-phpunit-resultprinter": "~1.2",
         "mockery/mockery": "^0.9.4"
     },
-    "repositories": [
-      {
-        "type": "vcs",
-        "url" : "https://github.com/anavallasuiza/adoadomin"
-      }
-    ],
     "autoload": {
         "psr-4": {
             "ANavallaSuiza\\Transleite\\": "src/"
