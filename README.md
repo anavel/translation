@@ -41,7 +41,7 @@ Include the files you want to manage within the `files` array, like this:
 
 Transleite will read and then write those files, so your app must have write permissions to those folders. You must specify a disc driver for Laravel to use:
 
-Within config/transleite.php:
+config/transleite.php:
 
 ```
     /*
@@ -55,7 +55,7 @@ Within config/transleite.php:
     'filedriver'  => 'YOUR_DRIVER_NAME',
 ```
 
-Within config/filesystem.php:
+config/filesystem.php:
 
 ```
     'disks' => [
@@ -65,10 +65,20 @@ Within config/filesystem.php:
             'root'   => base_path('resources/lang'),
         ],
     ]
-
 ```
     
+## Versioning
+
+If you use a versioning system (such as github) you should add the language folder to your gitignore. Otherwise, you might 
+get conflicts if different users update the translations. 
  
- ## How it works
+## How it works
  
+ Transleite reads the files that you specify in the config and displays their content in a form, tabbed by locale. 
+ The translation key becomes the input label and the translation itself becomes the input value.
+ Locales are taken from ADobadoMIN config. 
+  
+ To make the translation process easier, Transleite shows the same language entries in all locales, even if a key is missing in a given locale. 
+ In that case, the displayed text will be taken from the fallback locale (as Laravel does). 
  
+ When saved, translations are written back to the files. If a file doesn't exist in a locale, a new one is created. 
