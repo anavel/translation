@@ -1,6 +1,6 @@
-# adobadomin-transleite
+# adoadomin-transleite
 
-Manage laravel translation files from your admin panel. This package depends on [ADobadoMIN](https://github.com/anavallasuiza/adobadomin)
+Manage laravel translation files from your admin panel. This package depends on [AdoadoMIN](https://github.com/anavallasuiza/adoadomin)
 
 ### Features
 
