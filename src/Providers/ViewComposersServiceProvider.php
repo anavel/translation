@@ -1,5 +1,5 @@
 <?php
-namespace ANavallaSuiza\Transleite\Providers;
+namespace Anavel\Translation\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -22,6 +22,6 @@ class ViewComposersServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->view->composer('transleite::molecules.sidebar.default', 'ANavallaSuiza\Transleite\View\Composers\SidebarComposer');
+        $this->app->view->composer('anavel-translation::molecules.sidebar.default', 'Anavel\Translation\View\Composers\SidebarComposer');
     }
 }

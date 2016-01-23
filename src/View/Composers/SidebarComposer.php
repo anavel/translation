@@ -1,7 +1,6 @@
 <?php
-namespace ANavallaSuiza\Transleite\View\Composers;
+namespace Anavel\Translation\View\Composers;
 
-use ANavallaSuiza\Crudoado\Contracts\Abstractor\ModelFactory as ModelAbstractorFactory;
 use Request;
 use URL;
 
@@ -9,7 +8,7 @@ class SidebarComposer
 {
     public function compose($view)
     {
-        $files = config('transleite.files');
+        $files = config('anavel-translation.files');
 
         if (empty($files)) {
             throw new \Exception("No files configured.");
@@ -28,18 +27,18 @@ class SidebarComposer
         if (array_key_exists('user', $files)) {
             foreach ($files['user'] as $userFile) {
                 $items[] = [
-                    'route' => route('transleite.file.edit', [$userFile]),
+                    'route' => route('anavel-translation.file.edit', [$userFile]),
                     'name' => $userFile,
-                    'isActive' => URL::current() === route('transleite.file.edit', [$userFile])
+                    'isActive' => URL::current() === route('anavel-translation.file.edit', [$userFile])
                 ];
             }
         }
         if (array_key_exists('vendor', $files)) {
             foreach ($files['vendor'] as $vendorKey => $vendorFile) {
                 $items[] = [
-                    'route' => route('transleite.file.edit', [$vendorKey, $vendorFile]),
+                    'route' => route('anavel-translation.file.edit', [$vendorKey, $vendorFile]),
                     'name' => "$vendorKey : $vendorFile",
-                    'isActive' => URL::current() === route('transleite.file.edit', [$vendorKey, $vendorFile])
+                    'isActive' => URL::current() === route('anavel-translation.file.edit', [$vendorKey, $vendorFile])
                 ];
             }
         }

@@ -1,5 +1,5 @@
 <?php
-namespace Transleite\Tests;
+namespace Anavel\Translation\Tests;
 
 use Orchestra\Testbench\TestCase;
 use Mockery;
@@ -25,12 +25,12 @@ abstract class TestBase extends TestCase
      */
     protected function getEnvironmentSetUp($app)
     {
-        $app['config']->set('adoadomin.translation_languages', ['gl', 'en', 'es']);
+        $app['config']->set('anavel.translation_languages', ['gl', 'en', 'es']);
     }
 
     protected function getPackageProviders($app)
     {
-        return ['ANavallaSuiza\Transleite\TransleiteModuleProvider'];
+        return ['Anavel\Translation\TranslationModuleProvider'];
     }
 
 

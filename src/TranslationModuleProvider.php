@@ -1,10 +1,10 @@
 <?php
-namespace ANavallaSuiza\Transleite;
+namespace Anavel\Translation;
 
-use ANavallaSuiza\Adoadomin\Support\ModuleProvider;
+use Anavel\Foundation\Support\ModuleProvider;
 use Request;
 
-class TransleiteModuleProvider extends ModuleProvider
+class TranslationModuleProvider extends ModuleProvider
 {
 
     /**
@@ -16,16 +16,16 @@ class TransleiteModuleProvider extends ModuleProvider
 
     public function boot()
     {
-        $this->loadViewsFrom(__DIR__.'/../views', 'transleite');
+        $this->loadViewsFrom(__DIR__.'/../views', 'anavel-translation');
 
-        $this->loadTranslationsFrom(__DIR__.'/../lang', 'transleite');
+        $this->loadTranslationsFrom(__DIR__.'/../lang', 'anavel-translation');
 
 //        $this->publishes([
-//            __DIR__.'/../public/js' => public_path('vendor/transleite/js'),
+//            __DIR__.'/../public/js' => public_path('vendor/anavel-translation/js'),
 //        ], 'assets');
 
         $this->publishes([
-            __DIR__.'/../config/transleite.php' => config_path('transleite.php'),
+            __DIR__.'/../config/anavel-translation.php' => config_path('anavel-translation.php'),
         ], 'config');
     }
 
@@ -36,9 +36,9 @@ class TransleiteModuleProvider extends ModuleProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/transleite.php', 'transleite');
+        $this->mergeConfigFrom(__DIR__.'/../config/anavel-translation.php', 'anavel-translation');
 
-        $this->app->register('ANavallaSuiza\Transleite\Providers\ViewComposersServiceProvider');
+        $this->app->register('Anavel\Translation\Providers\ViewComposersServiceProvider');
 
     }
 
@@ -54,7 +54,7 @@ class TransleiteModuleProvider extends ModuleProvider
 
     public function name()
     {
-        return config('transleite.name');
+        return config('anavel-translation.name');
     }
 
     public function routes()
@@ -64,7 +64,7 @@ class TransleiteModuleProvider extends ModuleProvider
 
     public function mainRoute()
     {
-        return route('transleite.home');
+        return route('anavel-translation.home');
     }
 
     public function hasSidebar()
@@ -74,14 +74,14 @@ class TransleiteModuleProvider extends ModuleProvider
 
     public function sidebarMenu()
     {
-        return 'transleite::molecules.sidebar.default';
+        return 'anavel-translation::molecules.sidebar.default';
     }
 
     public function isActive()
     {
         $uri = Request::route()->uri();
 
-        if (strpos($uri, 'transleite') !== false) {
+        if (strpos($uri, 'translation') !== false) {
             return true;
         }
 

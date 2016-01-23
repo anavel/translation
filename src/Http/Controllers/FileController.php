@@ -1,9 +1,7 @@
 <?php
+namespace Anavel\Translation\Http\Controllers;
 
-
-namespace ANavallaSuiza\Transleite\Http\Controllers;
-
-use ANavallaSuiza\Adoadomin\Http\Controllers\Controller;
+use Anavel\Foundation\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use RedirectResponse;
 use Storage;
@@ -17,8 +15,8 @@ class FileController extends Controller
 
     public function __construct()
     {
-        $this->lang = config('adoadomin.translation_languages');
-        $this->config = config('transleite.files');
+        $this->lang = config('anavel.translation_languages');
+        $this->config = config('anavel-translation.files');
         $this->fallback = config('app.fallback_locale');
     }
 
@@ -49,17 +47,17 @@ class FileController extends Controller
         }
 
 
-        return View::make('transleite::pages.edit', compact('editLangs', 'editLangsMissingKeys'));
+        return View::make('anavel-translation::pages.edit', compact('editLangs', 'editLangsMissingKeys'));
     }
 
     public function update(Request $request, $param, $param2 = null)
     {
         if (! $request->has('translations')) {
-            session()->flash('adoadomin-alert', [
+            session()->flash('anavel-alert', [
                 'type'  => 'error',
                 'icon'  => 'fa-error',
-                'title' => trans('transleite::messages.alert_empty_translations_title'),
-                'text'  => trans('transleite::messages.alert_empty_translations_text')
+                'title' => trans('anavel-translation::messages.alert_empty_translations_title'),
+                'text'  => trans('anavel-translation::messages.alert_empty_translations_text')
             ]);
 
             return redirect()->back()->withInput();
@@ -81,24 +79,24 @@ class FileController extends Controller
         }
 
 
-        session()->flash('adoadomin-alert', [
+        session()->flash('anavel-alert', [
             'type'  => 'success',
             'icon'  => 'fa-check',
-            'title' => trans('transleite::messages.alert_translations_saved_title'),
-            'text'  => trans('transleite::messages.alert_translations_saved_text')
+            'title' => trans('anavel-translation::messages.alert_translations_saved_title'),
+            'text'  => trans('anavel-translation::messages.alert_translations_saved_text')
         ]);
 
-        return redirect(null, 200)->route('transleite.file.edit', [$param, $param2]);
+        return redirect(null, 200)->route('anavel-translation.file.edit', [$param, $param2]);
     }
 
     public function create(Request $request, $param, $param2 = null)
     {
         if (! $request->has('translations-new')) {
-            session()->flash('adoadomin-alert', [
+            session()->flash('anavel-alert', [
                 'type'  => 'error',
                 'icon'  => 'fa-error',
-                'title' => trans('transleite::messages.alert_empty_new_translations_title'),
-                'text'  => trans('transleite::messages.alert_empty_new_translations_text')
+                'title' => trans('anavel-translation::messages.alert_empty_new_translations_title'),
+                'text'  => trans('anavel-translation::messages.alert_empty_new_translations_text')
             ]);
 
             return redirect()->back()->withInput();
@@ -137,19 +135,19 @@ class FileController extends Controller
         $string .= var_export($translation, true) . ';';
         $disk->put($fileRoute, $string);
 
-        session()->flash('adoadomin-alert', [
+        session()->flash('anavel-alert', [
             'type'  => 'success',
             'icon'  => 'fa-check',
-            'title' => trans('transleite::messages.alert_translations_saved_title'),
-            'text'  => trans('transleite::messages.alert_translations_saved_text')
+            'title' => trans('anavel-translation::messages.alert_translations_saved_title'),
+            'text'  => trans('anavel-translation::messages.alert_translations_saved_text')
         ]);
 
-        return redirect(null, 200)->route('transleite.file.edit', [$param, $param2]);
+        return redirect(null, 200)->route('anavel-translation.file.edit', [$param, $param2]);
     }
 
     protected function getDisk()
     {
-        $diskDriver = config('transleite.filedriver');
+        $diskDriver = config('anavel-translation.filedriver');
         if (empty($diskDriver)) {
             throw new \Exception('filedriver should be set in config');
         }

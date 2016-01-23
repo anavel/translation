@@ -2,27 +2,27 @@
 
 Route::group(
     [
-        'prefix' => 'transleite',
-        'namespace' => 'ANavallaSuiza\Transleite\Http\Controllers'
+        'prefix' => 'translation',
+        'namespace' => 'Anavel\Translation\Http\Controllers'
     ],
     function () {
         Route::get('/', [
-            'as'   => 'transleite.home',
+            'as'   => 'anavel-translation.home',
             'uses' => 'HomeController@index'
         ]);
 
         Route::get('{param}/{param2?}', [
-            'as'   => 'transleite.file.edit',
+            'as'   => 'anavel-translation.file.edit',
             'uses' => 'FileController@edit'
         ]);
 
         Route::post('{param}/{param2?}', [
-            'as'   => 'transleite.file.create',
+            'as'   => 'anavel-translation.file.create',
             'uses' => 'FileController@create'
         ]);
 
         Route::put('{param}/{param2?}', [
-            'as'   => 'transleite.file.update',
+            'as'   => 'anavel-translation.file.update',
             'uses' => 'FileController@update'
         ]);
     }

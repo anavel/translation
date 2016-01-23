@@ -1,6 +1,6 @@
 {
-    "name": "anavallasuiza/adobadomin-transleite",
-    "description": "Manage translations",
+    "name": "anavel/translation",
+    "description": "Manage laravel translation files from your admin panel",
     "authors": [
         {
             "name": "Adrian P. Blunier",
@@ -15,7 +15,7 @@
         "php": ">=5.5.9",
         "illuminate/support": "5.1.*",
         "illuminate/translation": "5.1.*",
-        "anavallasuiza/adobadomin": "dev-master"
+        "anavel/foundation": "dev-master"
     },
     "require-dev": {
         "orchestra/testbench": "~3.1",
@@ -25,12 +25,12 @@
     },
     "autoload": {
         "psr-4": {
-            "ANavallaSuiza\\Transleite\\": "src/"
+            "Anavel\\Translation\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Transleite\\Tests\\": "tests"
+            "Anavel\\Translation\\Tests\\": "tests"
         }
     },
     "minimum-stability": "stable"

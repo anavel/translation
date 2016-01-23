@@ -1,11 +1,7 @@
 <?php
+namespace Anavel\Translation\Tests;
 
-
-namespace Transleite\Tests;
-
-
-
-use ANavallaSuiza\Transleite\Http\Controllers\HomeController;
+use Anavel\Translation\Http\Controllers\HomeController;
 
 class HomeControllerTest extends TestBase
 {
@@ -34,12 +30,12 @@ class HomeControllerTest extends TestBase
 
     public function test_is_instance_of_controller()
     {
-        $this->assertInstanceOf('ANavallaSuiza\Adoadomin\Http\Controllers\Controller', $this->sut);
+        $this->assertInstanceOf('Anavel\Foundation\Http\Controllers\Controller', $this->sut);
     }
 
     public function test_edit_throws_exception_if_no_files_configured()
     {
-        config(['transleite.files' => null]);
+        config(['anavel-translation.files' => null]);
         $this->setExpectedException('Exception', 'No files configured');
 
         $this->sut->index('test');
@@ -48,7 +44,7 @@ class HomeControllerTest extends TestBase
     public function test_edit_throws_exception_if_files_is_not_array()
     {
         $this->setExpectedException('Exception', 'Files should be an array');
-        config(['transleite.files' => 'Chompy']);
+        config(['anavel-translation.files' => 'Chompy']);
 
         $this->sut->index('test');
     }
@@ -56,14 +52,14 @@ class HomeControllerTest extends TestBase
     public function test_edit_throws_exception_if_user_nor_vendor_are_found()
     {
         $this->setExpectedException('Exception', '"user" or "vendor" files should be set');
-        config(['transleite.files' => ['test']]);
+        config(['anavel-translation.files' => ['test']]);
 
         $this->sut->index('test');
     }
 
     public function test_redirects_if_files_configured()
     {
-        config(['transleite.files' => $this->config]);
+        config(['anavel-translation.files' => $this->config]);
 
         $response = $this->sut->index();
 

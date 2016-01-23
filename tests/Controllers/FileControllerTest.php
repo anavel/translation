@@ -1,9 +1,7 @@
 <?php
+namespace Anavel\Translation\Tests;
 
-
-namespace Transleite\Tests;
-
-use ANavallaSuiza\Transleite\Http\Controllers\FileController;
+use Anavel\Translation\Http\Controllers\FileController;
 use Storage;
 
 class FileControllerTest extends TestBase
@@ -18,8 +16,8 @@ class FileControllerTest extends TestBase
     {
         parent::setUp();
 
-        config(['adoadomin.translation_languages' => ['en', 'es']]);
-        config(['transleite.filedriver' => 'diskdriver']);
+        config(['anavel.translation_languages' => ['en', 'es']]);
+        config(['anavel-translation.filedriver' => 'diskdriver']);
         config(['app.fallback_locale' => 'en']);
 
 
@@ -38,7 +36,7 @@ class FileControllerTest extends TestBase
 
     public function test_edit_returns_array_when_file_empty()
     {
-        config(['transleite.files' => $this->config]);
+        config(['anavel-translation.files' => $this->config]);
 
         $result = $this->sut->edit('test');
 
@@ -55,7 +53,7 @@ class FileControllerTest extends TestBase
     public function test_edit_returns_array_with_files_contents()
     {
         \App::instance('translator', $transMock = $this->mock('Illuminate\Filesystem\Filesystem\FileLoader'));
-        config(['transleite.files' => $this->config]);
+        config(['anavel-translation.files' => $this->config]);
 
         $transMock->shouldReceive('trans')->andReturn(['yeah' => 'yeah']);
 
@@ -76,7 +74,7 @@ class FileControllerTest extends TestBase
     public function test_edit_adds_missing_keys_from_fallback_locale()
     {
         \App::instance('translator', $transMock = $this->mock('Illuminate\Filesystem\Filesystem\FileLoader'));
-        config(['transleite.files' => $this->config]);
+        config(['anavel-translation.files' => $this->config]);
 
         $transMock->shouldReceive('trans')->with('test', [], null, 'en')->andReturn([
             'yeah'   => 'yeah',
@@ -110,7 +108,7 @@ class FileControllerTest extends TestBase
     public function test_edit_calls_vendor_file_when_param2_not_empty()
     {
         \App::instance('translator', $transMock = $this->mock('Illuminate\Filesystem\Filesystem\FileLoader'));
-        config(['transleite.files' => $this->config]);
+        config(['anavel-translation.files' => $this->config]);
 
         $transMock->shouldReceive('trans')->with('vendor::test', [], null,
             \Mockery::any())->andReturn(['yeah' => 'yeah']);
@@ -138,9 +136,9 @@ class FileControllerTest extends TestBase
         $result = $this->sut->update($requestMock, 'test');
 
         $this->assertInstanceOf('Illuminate\Http\RedirectResponse', $result);
-        $this->assertTrue($result->getSession()->has('adoadomin-alert'));
+        $this->assertTrue($result->getSession()->has('anavel-alert'));
 
-        $alert = $result->getSession()->get('adoadomin-alert');
+        $alert = $result->getSession()->get('anavel-alert');
 
         $this->assertEquals('error', $alert['type']);
     }
@@ -166,9 +164,9 @@ class FileControllerTest extends TestBase
         $result = $this->sut->update($requestMock, 'test');
 
         $this->assertInstanceOf('Illuminate\Http\RedirectResponse', $result);
-        $this->assertTrue($result->getSession()->has('adoadomin-alert'));
+        $this->assertTrue($result->getSession()->has('anavel-alert'));
 
-        $alert = $result->getSession()->get('adoadomin-alert');
+        $alert = $result->getSession()->get('anavel-alert');
 
         $this->assertEquals('success', $alert['type']);
     }
@@ -196,9 +194,9 @@ class FileControllerTest extends TestBase
         $result = $this->sut->update($requestMock, 'vendorname', 'test');
 
         $this->assertInstanceOf('Illuminate\Http\RedirectResponse', $result);
-        $this->assertTrue($result->getSession()->has('adoadomin-alert'));
+        $this->assertTrue($result->getSession()->has('anavel-alert'));
 
-        $alert = $result->getSession()->get('adoadomin-alert');
+        $alert = $result->getSession()->get('anavel-alert');
 
         $this->assertEquals('success', $alert['type']);
     }
@@ -230,9 +228,9 @@ return array (
         $result = $this->sut->update($requestMock, 'vendorname', 'test');
 
         $this->assertInstanceOf('Illuminate\Http\RedirectResponse', $result);
-        $this->assertTrue($result->getSession()->has('adoadomin-alert'));
+        $this->assertTrue($result->getSession()->has('anavel-alert'));
 
-        $alert = $result->getSession()->get('adoadomin-alert');
+        $alert = $result->getSession()->get('anavel-alert');
 
         $this->assertEquals('success', $alert['type']);
     }
@@ -243,7 +241,7 @@ return array (
 
         $requestMock = $this->mock('Illuminate\Http\Request');
 
-        config(['transleite.filedriver' => null]);
+        config(['anavel-translation.filedriver' => null]);
 
 
         $requestMock->shouldReceive('has')->with('translations')->times(1)->andReturn(true);
@@ -269,9 +267,9 @@ return array (
         $result = $this->sut->create($requestMock, 'test');
 
         $this->assertInstanceOf('Illuminate\Http\RedirectResponse', $result);
-        $this->assertTrue($result->getSession()->has('adoadomin-alert'));
+        $this->assertTrue($result->getSession()->has('anavel-alert'));
 
-        $alert = $result->getSession()->get('adoadomin-alert');
+        $alert = $result->getSession()->get('anavel-alert');
 
         $this->assertEquals('error', $alert['type']);
     }
@@ -282,7 +280,7 @@ return array (
 
         $requestMock = $this->mock('Illuminate\Http\Request');
 
-        config(['transleite.filedriver' => null]);
+        config(['anavel-translation.filedriver' => null]);
 
 
         $requestMock->shouldReceive('has')->with('translations-new')->times(1)->andReturn(true);
@@ -310,9 +308,9 @@ return array (
         $result = $this->sut->create($requestMock, 'test');
 
         $this->assertInstanceOf('Illuminate\Http\RedirectResponse', $result);
-        $this->assertTrue($result->getSession()->has('adoadomin-alert'));
+        $this->assertTrue($result->getSession()->has('anavel-alert'));
 
-        $alert = $result->getSession()->get('adoadomin-alert');
+        $alert = $result->getSession()->get('anavel-alert');
 
         $this->assertEquals('success', $alert['type']);
     }
@@ -344,9 +342,9 @@ return array (
         $result = $this->sut->create($requestMock, 'test');
 
         $this->assertInstanceOf('Illuminate\Http\RedirectResponse', $result);
-        $this->assertTrue($result->getSession()->has('adoadomin-alert'));
+        $this->assertTrue($result->getSession()->has('anavel-alert'));
 
-        $alert = $result->getSession()->get('adoadomin-alert');
+        $alert = $result->getSession()->get('anavel-alert');
 
         $this->assertEquals('success', $alert['type']);
     }

@@ -1,10 +1,8 @@
 <?php
+namespace Anavel\Translation\Tests;
 
 
-namespace Transleite\Tests;
-
-
-use ANavallaSuiza\Transleite\Services\ConfigurationReader;
+use Anavel\Translation\Services\ConfigurationReader;
 
 class ConfigurationReaderTest extends TestBase
 {

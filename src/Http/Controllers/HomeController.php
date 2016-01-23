@@ -1,16 +1,14 @@
 <?php
+namespace Anavel\Translation\Http\Controllers;
 
-
-namespace ANavallaSuiza\Transleite\Http\Controllers;
-
-use ANavallaSuiza\Adoadomin\Http\Controllers\Controller;
+use Anavel\Foundation\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 
 class HomeController extends Controller
 {
     public function index()
     {
-        $files = config('transleite.files');
+        $files = config('anavel-translation.files');
 
         if (empty($files)) {
             throw new \Exception("No files configured.");
@@ -26,10 +24,10 @@ class HomeController extends Controller
         }
 
         if (array_key_exists('user', $files)) {
-            return new RedirectResponse(route('transleite.file.edit',  $files['user'][0]));
+            return new RedirectResponse(route('anavel-translation.file.edit',  $files['user'][0]));
         } else {
             $key = key($files['vendor']);
-            return new RedirectResponse(route('transleite.file.edit',  [$key, $files['vendor'][$key]]));
+            return new RedirectResponse(route('anavel-translation.file.edit',  [$key, $files['vendor'][$key]]));
         }
     }
 }

@@ -1,5 +1,5 @@
 <?php
-namespace ANavallaSuiza\Transleite\Services;
+namespace Anavel\Translation\Services;
 
 trait ConfigurationReader
 {

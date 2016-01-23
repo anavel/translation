@@ -2,13 +2,13 @@
     <legend>{{ $groupTitle }}</legend>
     @foreach ($group as $childLineKey => $childLine)
         @if(is_array($childLine))
-            @include('transleite::atoms.form.transleite-group', [
+            @include('anavel-translation::atoms.form.translation-group', [
                 'groupTitle' => $groupTitle . ' | ' .$childLineKey,
                 'group' => $childLine,
                 'formElementID' => "{$formElementID}[{$childLineKey}]"
             ])
         @else
-            <div class="form-group transleite-group">
+            <div class="form-group translation-group">
                 <label for="{!! "translations[$langKey]" !!}{!! $formElementID !!}[{{ $childLineKey }}]"
                        class="control-label col-lg-4">{{ $childLineKey }}</label>
 

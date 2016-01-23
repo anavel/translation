@@ -1,6 +1,6 @@
-# adoadomin-transleite
+# Anavel translation
 
-Manage laravel translation files from your admin panel. This package depends on [AdoadoMIN](https://github.com/anavallasuiza/adoadomin)
+Manage laravel translation files from your admin panel. This package depends on [Anavel foundation](https://github.com/anavel/foundation)
 
 ### Features
 
@@ -14,9 +14,9 @@ Manage laravel translation files from your admin panel. This package depends on 
 
 ## Configuration
 
-Publish Transleite config file with `php artisan vendor:publish`
+Publish translation config file with `php artisan vendor:publish`
 
-Include the files you want to manage within the `files` array, like this: 
+Include the files you want to manage within the `files` array, like this:
 
 ```
     /*
@@ -27,7 +27,7 @@ Include the files you want to manage within the `files` array, like this:
     */
     'files' => [
         'user'   => [
-            'aFileName', 
+            'aFileName',
             'anotherFileName'
         ],
         'vendor' => [
@@ -36,12 +36,12 @@ Include the files you want to manage within the `files` array, like this:
     ],
 ```
 
-`user` is an array of filenames (without extension) located in Laravel's default folder (resources/lang/LOCALE_NAME). 
+`user` is an array of filenames (without extension) located in Laravel's default folder (resources/lang/LOCALE_NAME).
 `vendor` is an associative array of filenames (without extension), keyed by vendorname, located in Laravel's default folder (resources/lang/vendor/VENDORNAME/LOCALE_NAME).
 
-Transleite will read and then write those files, so your app must have write permissions to those folders. You must specify a disc driver for Laravel to use:
+This package will read and then write those files, so your app must have write permissions to those folders. You must specify a disc driver for Laravel to use:
 
-config/transleite.php:
+config/anavel-translation.php:
 
 ```
     /*
@@ -66,19 +66,19 @@ config/filesystem.php:
         ],
     ]
 ```
-    
+
 ## Versioning
 
-If you use a versioning system (such as github) you should add the language folder to your gitignore. Otherwise, you might 
-get conflicts if different users update the translations. 
- 
+If you use a versioning system (such as github) you should add the language folder to your gitignore. Otherwise, you might
+get conflicts if different users update the translations.
+
 ## How it works
- 
- Transleite reads the files that you specify in the config and displays their content in a form, tabbed by locale. 
+
+ Translations reads the files that you specify in the config and displays their content in a form, tabbed by locale.
  The translation key becomes the input label and the translation itself becomes the input value.
- Locales are taken from ADobadoMIN config. 
-  
- To make the translation process easier, Transleite shows the same language entries in all locales, even if a key is missing in a given locale. 
- In that case, the displayed text will be taken from the fallback locale (as Laravel does). 
- 
- When saved, translations are written back to the files. If a file doesn't exist in a locale, a new one is created. 
+ Locales are taken from the Anavel foundation config.
+
+ To make the translation process easier, Translation shows the same language entries in all locales, even if a key is missing in a given locale.
+ In that case, the displayed text will be taken from the fallback locale (as Laravel does).
+
+ When saved, translations are written back to the files. If a file doesn't exist in a locale, a new one is created.
