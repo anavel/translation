@@ -69,7 +69,7 @@ config/filesystem.php:
 
 ## Versioning
 
-If you use a versioning system (such as github) you should add the language folder to your gitignore. Otherwise, you might
+If you use a versioning system (such as git) you should add the language folder to your gitignore. Otherwise, you might
 get conflicts if different users update the translations.
 
 ## How it works
