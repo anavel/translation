@@ -1,4 +1,4 @@
-# Anavel translation [![Build Status](https://travis-ci.org/anavel/translation.svg?branch=master)](https://travis-ci.org/anavel/translation)
+# Anavel translation [![Build Status](https://travis-ci.org/anavel/translation.svg?branch=master)](https://travis-ci.org/anavel/translation) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/anavel/translation/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/anavel/translation/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/anavel/translation/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/anavel/translation/?branch=master)
 
 Manage laravel translation files from your admin panel. This package depends on [Anavel foundation](https://github.com/anavel/foundation)
 
