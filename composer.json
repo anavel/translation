@@ -1,0 +1,37 @@
+{
+    "name": "anavel/translation",
+    "description": "Manage laravel translation files from your admin panel",
+    "authors": [
+        {
+            "name": "Adrian P. Blunier",
+            "email": "adrian@anavallasuiza.com"
+        },
+        {
+            "name": "Carlos Morales",
+            "email": "carlos@anavallasuiza.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.9",
+        "illuminate/support": "5.1.*",
+        "illuminate/translation": "5.1.*",
+        "anavel/foundation": "dev-master"
+    },
+    "require-dev": {
+        "orchestra/testbench": "~3.1",
+        "phpunit/phpunit": "~4.0",
+        "whatthejeff/nyancat-phpunit-resultprinter": "~1.2",
+        "mockery/mockery": "^0.9.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Anavel\\Translation\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Anavel\\Translation\\Tests\\": "tests"
+        }
+    },
+    "minimum-stability": "stable"
+}
