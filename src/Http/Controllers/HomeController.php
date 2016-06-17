@@ -24,10 +24,10 @@ class HomeController extends Controller
         }
 
         if (array_key_exists('user', $files)) {
-            return new RedirectResponse(route('anavel-translation.file.edit',  $files['user'][0]));
+            return new RedirectResponse(route('anavel-translation.file.edit', $files['user'][0]));
         } else {
             $key = key($files['vendor']);
-            return new RedirectResponse(route('anavel-translation.file.edit',  [$key, $files['vendor'][$key]]));
+            return new RedirectResponse(route('anavel-translation.file.edit', [$key, $files['vendor'][$key]]));
         }
     }
 }

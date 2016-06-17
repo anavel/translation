@@ -39,7 +39,6 @@ class TranslationModuleProvider extends ModuleProvider
         $this->mergeConfigFrom(__DIR__.'/../config/anavel-translation.php', 'anavel-translation');
 
         $this->app->register('Anavel\Translation\Providers\ViewComposersServiceProvider');
-
     }
 
     /**
